@@ -15,7 +15,6 @@ public class Employee {
     private Long id;
     private String lastName, firstName;
     private String homeAddress;
-    private int homeAddressNumber;
     private String phoneNumber;
     private LocalDate hireDate, redundancyDate;
     private Status status;
@@ -27,11 +26,10 @@ public class Employee {
 
     public Employee() {}
 
-    public Employee(String lastName, String firstName, String homeAddress, int homeAddressNumber, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, String companyName, Unit unit, String position) {
+    public Employee(String lastName, String firstName, String homeAddress, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, String companyName, Unit unit, String position) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.homeAddress = homeAddress;
-        this.homeAddressNumber = homeAddressNumber;
         this.phoneNumber = phoneNumber;
         this.hireDate = hireDate;
         this.redundancyDate = redundancyDate;
@@ -72,14 +70,6 @@ public class Employee {
 
     public void setHomeAddress(String homeAddress) {
         this.homeAddress = homeAddress;
-    }
-
-    public int getHomeAddressNumber() {
-        return homeAddressNumber;
-    }
-
-    public void setHomeAddressNumber(int homeAddressNumber) {
-        this.homeAddressNumber = homeAddressNumber;
     }
 
     public String getPhoneNumber() {
