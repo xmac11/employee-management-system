@@ -14,31 +14,20 @@ public class UnitController {
     @Autowired
     UnitService service;
 
-    @GetMapping("units")
-    public ResponseEntity<GenericResponse> getAllUnits() {
+    @GetMapping("/units")
+    public ResponseEntity getAllUnits() {
 
         GenericResponse response = service.getAllUnits();
 
-        return new ResponseEntity<>(
-                response,
-                null,
-                response.getError() != null ?
-                        HttpStatus.INTERNAL_SERVER_ERROR:
-                        HttpStatus.OK
-        );
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
     }
 
-    @GetMapping("units/{unitId}")
-    public ResponseEntity<GenericResponse> getUnitById(@PathVariable Long unitId) {
+    @GetMapping("/units/{unitId}")
+    public ResponseEntity getUnitById(@PathVariable Long unitId) {
 
         GenericResponse response = service.getUnitById(unitId);
 
-        return new ResponseEntity<>(
-                response,
-                null,
-                response.getError() != null ?
-                        HttpStatus.BAD_REQUEST :
-                        HttpStatus.OK
-        );
+        return (response.getData() != null) ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                                              new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
 }
