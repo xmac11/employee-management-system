@@ -20,14 +20,7 @@ public class UnitService {
 
         List<Unit> unitList = repository.findAll();
 
-        return unitList.isEmpty() ?
-                new GenericResponse<>(
-                        new CustomError(
-                                0,
-                                "unitList empty",
-                                "No units found")
-                ) :
-                new GenericResponse<>(mapper.mapUnitListToUnitResponseList(unitList));
+        return new GenericResponse<>(mapper.mapUnitListToUnitResponseList(unitList));
     }
 
     GenericResponse getUnitById(Long id) {
@@ -38,8 +31,8 @@ public class UnitService {
                 new GenericResponse<>(
                         new CustomError(
                         0,
-                        "BadInput",
-                        "Unit with ID: " + id + " doesn't exist"
+                        "Error : Bad Input",
+                        "Unit with ID: " + id + " does not exist"
                         )
                 ) :
                 new GenericResponse<>(mapper.mapUnitListToUnitResponseList(Collections.singletonList(unit)));
