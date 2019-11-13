@@ -35,6 +35,6 @@ public class UnitService {
                         "Unit with ID: " + id + " does not exist"
                         )
                 ) :
-                new GenericResponse<>(mapper.mapUnitListToUnitResponseList(Collections.singletonList(unit)));
+                new GenericResponse<>(mapper.mapUnitToUnitResponse(unit));
     }
 }
