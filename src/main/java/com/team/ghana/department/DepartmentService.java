@@ -26,12 +26,12 @@ public class DepartmentService {
     }
 
     public GenericResponse getDepartmentByID(Long departmentID) {
-        Optional<Department> department = departmentRepository.findById(departmentID);
+        Department department = departmentRepository.findById(departmentID).orElse(null);
 
-        if(!department.isPresent()) {
+        if(department == null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department with ID: " + departmentID + " does not exist"));
         }
 
-        return new GenericResponse<>(departmentMapper.mapDepartmentToDepartmentResponse(department.get()));
+        return new GenericResponse<>(departmentMapper.mapDepartmentToDepartmentResponse(department));
     }
 }
