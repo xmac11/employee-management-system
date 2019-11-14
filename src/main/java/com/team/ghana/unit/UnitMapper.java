@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @Component
 public class UnitMapper {
 
-    UnitResponse mapUnitToUnitResponse(Unit unit) {
+    public UnitResponse mapUnitToUnitResponse(Unit unit) {
 
         return new UnitResponse(
                 unit.getId(),
