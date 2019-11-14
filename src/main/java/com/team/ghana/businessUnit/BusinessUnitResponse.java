@@ -2,25 +2,15 @@ package com.team.ghana.businessUnit;
 
 import com.team.ghana.company.Company;
 
-import javax.persistence.*;
+public class BusinessUnitResponse {
 
-@Entity
-public class BusinessUnit {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int floor;
-    @ManyToOne
     private Company company;
 
-    public BusinessUnit() {
-    }
-
-    public BusinessUnit(Long id, String name, int floor, Company company) {}
-
-    public BusinessUnit(String name, int floor, Company company) {
+    public BusinessUnitResponse(Long id, String name, int floor, Company company) {
+        this.id = id;
         this.name = name;
         this.floor = floor;
         this.company = company;
