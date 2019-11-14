@@ -1,5 +1,6 @@
 package com.team.ghana.businessUnit;
 
+import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,4 +23,14 @@ public class BusinessUnitService {
 
         return new GenericResponse<>(businessUnitResponse);
     }
+
+    public GenericResponse getAllBusinessUnitById(Long businessUnitId) {
+            BusinessUnit businessUnit = repository.findById(businessUnitId).orElse(null);
+
+            if(businessUnit == null) {
+                return new GenericResponse<>(new CustomError(0, "Error", "BusinessUnit with ID: " + businessUnitId + " does not exist"));
+            }
+
+            return new GenericResponse<>(mapper.mapBusinessUnitToBusinessUnitResponse(businessUnit));
+        }
 }
