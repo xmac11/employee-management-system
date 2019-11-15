@@ -1,5 +1,7 @@
 package com.team.ghana.employee;
 
+import java.util.Objects;
+
 public class EmployeeResponse {
 
     private Long id;
@@ -104,5 +106,27 @@ public class EmployeeResponse {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeResponse that = (EmployeeResponse) o;
+        return id.equals(that.id) &&
+                fullName.equals(that.fullName) &&
+                homeAddress.equals(that.homeAddress) &&
+                phoneNumber.equals(that.phoneNumber) &&
+                workingPeriod.equals(that.workingPeriod) &&
+                status.equals(that.status) &&
+                contractType.equals(that.contractType) &&
+                companyName.equals(that.companyName) &&
+                unitName.equals(that.unitName) &&
+                position.equals(that.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fullName, homeAddress, phoneNumber, workingPeriod, status, contractType, companyName, unitName, position);
     }
 }

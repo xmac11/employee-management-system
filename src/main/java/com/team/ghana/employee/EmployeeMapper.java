@@ -28,7 +28,7 @@ public class EmployeeMapper {
                 .collect(Collectors.toList());
     }
 
-    private String mapEmployeeWorkingPeriod(Employee employee) {
+    public String mapEmployeeWorkingPeriod(Employee employee) {
 
         String hireDate = employee.getHireDate() == null ?
                 "[Missing Hire Date]" :
@@ -42,7 +42,7 @@ public class EmployeeMapper {
 
         return hireDate + " ---> " + dismissalDate;
     }
-    private String mapEmployeeFullName(Employee employee) {
+    public String mapEmployeeFullName(Employee employee) {
 
         String firstName = employee.getFirstName() == null || "".equals(employee.getFirstName()) ?
                 "[Missing First Name]" :
