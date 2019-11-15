@@ -19,7 +19,7 @@ public class UnitController {
 
         GenericResponse response = service.getAllUnits();
 
-        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
+        return new ResponseEntity<>(response, null, HttpStatus.OK);
     }
 
     @GetMapping("/units/{unitId}")
@@ -27,7 +27,9 @@ public class UnitController {
 
         GenericResponse response = service.getUnitById(unitId);
 
-        return (response.getData() != null) ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
-                                              new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, null, (response.getData() != null) ?
+                                                                    HttpStatus.OK :
+                                                                    HttpStatus.BAD_REQUEST
+        );
     }
 }
