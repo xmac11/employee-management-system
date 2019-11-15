@@ -53,9 +53,9 @@ public class DepartmentMapperShould {
     public void mapDepartmentListToDepartmentResponseList() {
         List<Department> departments = Arrays.asList(itDepartment, solutionsDepartment, bankingDepartment);
 
-        List<DepartmentResponse> expected = Arrays.asList(mapper.mapDepartmentToDepartmentResponse(itDepartment),
-                                                          mapper.mapDepartmentToDepartmentResponse(solutionsDepartment),
-                                                          mapper.mapDepartmentToDepartmentResponse(bankingDepartment));
+        List<DepartmentResponse> expected = Arrays.asList(new DepartmentResponse(itDepartment.getId(), itDepartment.getName(), itDepartment.getBusinessUnit().getName()),
+                                                          new DepartmentResponse(solutionsDepartment.getId(), solutionsDepartment.getName(), solutionsDepartment.getBusinessUnit().getName()),
+                                                          new DepartmentResponse(bankingDepartment.getId(), bankingDepartment.getName(), bankingDepartment.getBusinessUnit().getName()));
         List<DepartmentResponse> actual = mapper.mapDepartmentListToDepartmentResponseList(departments);
 
         Assert.assertEquals(expected, actual);
