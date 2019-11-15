@@ -9,16 +9,16 @@ public class BusinessUnit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String name;
     private int floor;
     @ManyToOne
     private Company company;
 
-    public BusinessUnit() {
+    public BusinessUnit(String horizontal, int floor, String unisystems) {
     }
 
-    public BusinessUnit(Long id, String name, int floor, Company company) {}
+    public BusinessUnit(long id, String name, int floor, Company company) {}
 
     public BusinessUnit(String name, int floor, Company company) {
         this.name = name;
@@ -26,11 +26,11 @@ public class BusinessUnit {
         this.company = company;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
