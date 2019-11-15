@@ -1,5 +1,7 @@
 package com.team.ghana.unit;
 
+import java.util.Objects;
+
 public class UnitResponse {
 
     private Long id;
@@ -34,5 +36,20 @@ public class UnitResponse {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UnitResponse that = (UnitResponse) o;
+        return id.equals(that.id) &&
+                name.equals(that.name) &&
+                departmentName.equals(that.departmentName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, departmentName);
     }
 }

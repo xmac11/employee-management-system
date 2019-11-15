@@ -2,7 +2,7 @@ package com.team.ghana.unit;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +18,9 @@ public class UnitMapper {
         );
     }
 
-    List<UnitResponse> mapUnitListToUnitResponseList(List<Unit> unitList) {
+    public List<UnitResponse> mapUnitListToUnitResponseList(List<Unit> unitList) {
 
-        List<UnitResponse> unitResponseList = new ArrayList<>();
+        List<UnitResponse> unitResponseList = Collections.emptyList();
         unitResponseList =
                 unitList.stream()
                         .map(this::mapUnitToUnitResponse)
