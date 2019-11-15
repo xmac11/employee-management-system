@@ -15,6 +15,9 @@ public class BusinessUnit {
     @ManyToOne
     private Company company;
 
+    public BusinessUnit() {
+    }
+
     public BusinessUnit(String horizontal, int floor, String unisystems) {
     }
 

@@ -18,7 +18,7 @@ public class BusinessUnitController {
     @Autowired
     BusinessUnitService service;
 
-    @GetMapping("/businessUnit")
+    @GetMapping("/businessUnits")
     public ResponseEntity getAllBusinessUnit() {
 
         GenericResponse response = service.getAllBusinessUnit();
@@ -30,7 +30,7 @@ public class BusinessUnitController {
         );
     }
 
-    @GetMapping("/businessUnit/{businessUnitId}")
+    @GetMapping("/businessUnits/{businessUnitId}")
         public ResponseEntity getBusinessUnitById(@PathVariable Long businessUnitId) {
             GenericResponse response = service.getAllBusinessUnitById(businessUnitId);
 
