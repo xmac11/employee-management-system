@@ -9,7 +9,7 @@ public class BusinessUnit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private int floor;
     @ManyToOne
@@ -18,22 +18,17 @@ public class BusinessUnit {
     public BusinessUnit() {
     }
 
-    public BusinessUnit(String horizontal, int floor, String unisystems) {
-    }
-
-    public BusinessUnit(long id, String name, int floor, Company company) {}
-
     public BusinessUnit(String name, int floor, Company company) {
         this.name = name;
         this.floor = floor;
         this.company = company;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

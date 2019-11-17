@@ -22,10 +22,10 @@ public class BusinessUnitMapperShould {
     @Before
     public void setup(){
         mapper = new BusinessUnitMapper();
-        businessUnitInput = new BusinessUnit("Horizontal",1, "Unisystems");
-        businessUnitInput.setId(50);
+        businessUnitInput = new BusinessUnit("Horizontal",1, companyInput);
+        businessUnitInput.setId(50L);
         companyInput = new Company("Unisystems","2109235100","Syggroo 145 Athina");
-        companyInput.setId(100);
+        companyInput.setId(100L);
         output = mapper.mapBusinessUnitToBusinessUnitResponse(businessUnitInput);
     }
 

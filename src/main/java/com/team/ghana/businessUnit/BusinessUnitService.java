@@ -12,19 +12,19 @@ import java.util.List;
 public class BusinessUnitService {
 
     @Autowired
-    BusinessUnitRepository repository;
+    private BusinessUnitRepository repository;
 
     @Autowired
-    BusinessUnitMapper mapper;
+    private BusinessUnitMapper mapper;
 
-    public GenericResponse getAllBusinessUnit(){
+    public GenericResponse<BusinessUnitResponse> getAllBusinessUnit(){
         List<BusinessUnit> retrievedBusinessUnits = repository.findAll();
         List<BusinessUnitResponse> businessUnitResponse = mapper.mapBusinessUnitResponseFromBusinessUnit(retrievedBusinessUnits);
 
-        return new GenericResponse<>(businessUnitResponse);
+        return new GenericResponse(businessUnitResponse);
     }
 
-    public GenericResponse getAllBusinessUnitById(Long businessUnitId) {
+    public GenericResponse<BusinessUnitResponse> getAllBusinessUnitById(Long businessUnitId) {
             BusinessUnit businessUnit = repository.findById(businessUnitId).orElse(null);
 
             if(businessUnit == null) {

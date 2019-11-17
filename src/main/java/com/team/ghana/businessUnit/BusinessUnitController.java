@@ -16,14 +16,14 @@ import java.util.List;
 public class BusinessUnitController {
 
     @Autowired
-    BusinessUnitService service;
+    private BusinessUnitService service;
 
     @GetMapping("/businessUnits")
     public ResponseEntity getAllBusinessUnit() {
 
         GenericResponse response = service.getAllBusinessUnit();
 
-        return new ResponseEntity(
+        return new ResponseEntity<>(
                 response.getData(),
                 null,
                 HttpStatus.OK
