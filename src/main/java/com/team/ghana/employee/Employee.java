@@ -24,7 +24,8 @@ public class Employee {
     private Unit unit;
     private String position;
 
-    public Employee() {}
+    public Employee() {
+    }
 
     public Employee(String lastName, String firstName, String homeAddress, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, String companyName, Unit unit, String position) {
         this.lastName = lastName;
