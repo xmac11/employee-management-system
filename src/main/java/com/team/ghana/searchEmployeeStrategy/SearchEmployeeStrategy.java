@@ -1,4 +1,4 @@
-package com.team.ghana.strategy;
+package com.team.ghana.searchEmployeeStrategy;
 
 import com.team.ghana.employee.Employee;
 

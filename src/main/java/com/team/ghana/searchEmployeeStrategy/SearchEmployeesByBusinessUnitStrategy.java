@@ -1,18 +1,18 @@
-package com.team.ghana.strategy;
+package com.team.ghana.searchEmployeeStrategy;
 
 import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.employee.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SearchEmployeesByBusinessUnitStrategy implements SearchEmployeeStrategy {
 
+    @Autowired
     private BusinessUnitRepository businessUnitRepository;
-
-    public SearchEmployeesByBusinessUnitStrategy(BusinessUnitRepository businessUnitRepository) {
-        this.businessUnitRepository = businessUnitRepository;
-    }
 
     @Override
     public List<Employee> execute(List<Employee> allEmployees, Long id) {

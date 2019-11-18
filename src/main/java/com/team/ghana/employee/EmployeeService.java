@@ -1,9 +1,10 @@
 package com.team.ghana.employee;
 
+import com.team.ghana.enums.Endpoint;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
-import com.team.ghana.strategy.SearchEmployeeStrategy;
-import com.team.ghana.strategy.SearchEmployeeStrategyFactory;
+import com.team.ghana.searchEmployeeStrategy.SearchEmployeeStrategy;
+import com.team.ghana.searchEmployeeStrategy.SearchEmployeeStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,6 @@ public class EmployeeService {
     private EmployeeMapper employeeMapper;
     @Autowired
     private SearchEmployeeStrategyFactory strategyFactory;
-
-    enum Endpoint {BUSINESSUNIT, DEPARTMENT, UNIT}
 
     public GenericResponse getAllEmployees() {
         List<Employee> employeeList = employeeRepository.findAll();
