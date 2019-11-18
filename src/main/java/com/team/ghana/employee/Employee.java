@@ -5,6 +5,8 @@ import com.team.ghana.enums.Status;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -13,13 +15,15 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String lastName, firstName;
     private String homeAddress;
     private String phoneNumber;
-    private LocalDate hireDate, redundancyDate;
+    @NotNull
+    private LocalDate hireDate;
+    private LocalDate redundancyDate;
     private Status status;
     private ContractType contractType;
-    private String companyName;
     @ManyToOne
     private Unit unit;
     private String position;
@@ -27,7 +31,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String lastName, String firstName, String homeAddress, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, String companyName, Unit unit, String position) {
+    public Employee(String lastName, String firstName, String homeAddress, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, Unit unit, String position) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.homeAddress = homeAddress;
@@ -36,7 +40,6 @@ public class Employee {
         this.redundancyDate = redundancyDate;
         this.status = status;
         this.contractType = contractType;
-        this.companyName = companyName;
         this.unit = unit;
         this.position = position;
     }
@@ -111,14 +114,6 @@ public class Employee {
 
     public void setContractType(ContractType contractType) {
         this.contractType = contractType;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
     }
 
     public Unit getUnit() {

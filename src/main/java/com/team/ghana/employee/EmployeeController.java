@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
 
     @Autowired
-    EmployeeService employeeService;
+    private EmployeeService employeeService;
 
     @GetMapping("/employees")
     public ResponseEntity getAllEmployees() {
         GenericResponse response = employeeService.getAllEmployees();
 
-        return new ResponseEntity<>(response.getData(),
-                null,
-                HttpStatus.OK);
+        return new ResponseEntity<>(response.getData(),null, HttpStatus.OK);
     }
 
     @GetMapping("/employees/{employeeId}")
@@ -28,7 +26,8 @@ public class EmployeeController {
 
         GenericResponse response = employeeService.getEmployeeById(employeeId);
 
-        return (response.getData() != null) ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :
+        return (response.getData() != null) ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :
                 new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
 
     }

@@ -2,6 +2,7 @@ package com.team.ghana.employee;
 
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,13 +10,10 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
-
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
-        this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
-    }
+    @Autowired
+    private EmployeeRepository employeeRepository;
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
     public GenericResponse getAllEmployees() {
         List<Employee> employeeList = employeeRepository.findAll();
@@ -31,9 +29,7 @@ public class EmployeeService {
                         new CustomError(
                                 0,
                                 "Bad Input",
-                                "Employee with ID: " + employeeId + " doesn't exist."
-                        )
-                ) :
+                                "Employee with ID: " + employeeId + " doesn't exist.") ) :
                 new GenericResponse<>(employeeMapper.mapEmployeeToEmployeeResponse(employee));
     }
 }

@@ -1,4 +1,4 @@
-package com.team.ghana;
+package com.team.ghana.unit;
 
 import com.team.ghana.department.Department;
 import com.team.ghana.unit.Unit;
