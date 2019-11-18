@@ -8,4 +8,5 @@ public interface SearchEmployeeStrategy {
 
     List<Employee> execute(List<Employee> allEmployees, Long id);
 
+    boolean idExists(Long id);
 }

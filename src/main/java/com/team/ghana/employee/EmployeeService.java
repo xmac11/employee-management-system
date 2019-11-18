@@ -7,6 +7,7 @@ import com.team.ghana.strategy.SearchEmployeeStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,6 +19,8 @@ public class EmployeeService {
     private EmployeeMapper employeeMapper;
     @Autowired
     private SearchEmployeeStrategyFactory strategyFactory;
+
+    enum Endpoint {BUSINESSUNIT, DEPARTMENT, UNIT}
 
     public GenericResponse getAllEmployees() {
         List<Employee> employeeList = employeeRepository.findAll();
@@ -38,12 +41,29 @@ public class EmployeeService {
     }
 
     public GenericResponse getEmployeesBySearchCriteria(String searchCriteria, Long id) {
-        List<Employee> allEmployees = employeeRepository.findAll();
+        if(!enumContains(searchCriteria)) {
+            return new GenericResponse(new CustomError(0, "Error", searchCriteria + " is not valid. Use " + Arrays.toString(Endpoint.values()).toLowerCase()));
+        }
 
+        List<Employee> allEmployees = employeeRepository.findAll();
         SearchEmployeeStrategy strategy = strategyFactory.makeStrategy(searchCriteria);
+
+        if(!strategy.idExists(id)) {
+            return new GenericResponse(new CustomError(0, "Error", searchCriteria + " with Id " + id + " does not exist."));
+        }
+
         List<Employee> employees = strategy.execute(allEmployees, id);
         List<EmployeeResponse> employeeResponses = employeeMapper.mapEmployeeListToEmployeeResponseList(employees);
 
         return new GenericResponse<>(employeeResponses);
+    }
+
+    private boolean enumContains(String searchCriteria) {
+        for(Endpoint endpoint: Endpoint.values()){
+            if(String.valueOf(endpoint).equalsIgnoreCase(searchCriteria))
+                return true;
+        }
+
+        return false;
     }
 }
