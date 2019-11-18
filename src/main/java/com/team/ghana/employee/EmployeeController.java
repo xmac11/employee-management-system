@@ -32,7 +32,7 @@ public class EmployeeController {
 
     }
 
-    @GetMapping("/{searchCriteria}/{id}")
+    @GetMapping("/employees/{searchCriteria}/{id}")
     public ResponseEntity getEmployeesBySearchCriteria(@PathVariable String searchCriteria, @PathVariable Long id) {
         GenericResponse response = employeeService.getEmployeesBySearchCriteria(searchCriteria, id);
 

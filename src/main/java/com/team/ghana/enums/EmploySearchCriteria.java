@@ -1,5 +1,5 @@
 package com.team.ghana.enums;
 
-public enum Endpoint {
+public enum EmploySearchCriteria {
     BUSINESSUNIT, DEPARTMENT, UNIT
 }

@@ -1,6 +1,6 @@
 package com.team.ghana.employee;
 
-import com.team.ghana.enums.Endpoint;
+import com.team.ghana.enums.EmploySearchCriteria;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
 import com.team.ghana.searchEmployeeStrategy.SearchEmployeeStrategy;
@@ -41,7 +41,7 @@ public class EmployeeService {
 
     public GenericResponse getEmployeesBySearchCriteria(String searchCriteria, Long id) {
         if(!enumContains(searchCriteria)) {
-            return new GenericResponse(new CustomError(0, "Error", searchCriteria + " is not valid. Use " + Arrays.toString(Endpoint.values()).toLowerCase()));
+            return new GenericResponse(new CustomError(0, "Error", searchCriteria + " is not valid. Use " + Arrays.toString(EmploySearchCriteria.values()).toLowerCase()));
         }
 
         List<Employee> allEmployees = employeeRepository.findAll();
@@ -58,7 +58,7 @@ public class EmployeeService {
     }
 
     private boolean enumContains(String searchCriteria) {
-        for(Endpoint endpoint: Endpoint.values()){
+        for(EmploySearchCriteria endpoint: EmploySearchCriteria.values()){
             if(String.valueOf(endpoint).equalsIgnoreCase(searchCriteria))
                 return true;
         }
