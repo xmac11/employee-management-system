@@ -44,13 +44,13 @@ public class EmployeeService {
             return new GenericResponse(new CustomError(0, "Error", searchCriteria + " is not valid. Use " + Arrays.toString(EmploySearchCriteria.values()).toLowerCase()));
         }
 
-        List<Employee> allEmployees = employeeRepository.findAll();
         SearchEmployeeStrategy strategy = strategyFactory.makeStrategy(searchCriteria);
 
         if(!strategy.idExists(id)) {
             return new GenericResponse(new CustomError(0, "Error", searchCriteria + " with Id " + id + " does not exist."));
         }
 
+        List<Employee> allEmployees = employeeRepository.findAll();
         List<Employee> employees = strategy.execute(allEmployees, id);
         List<EmployeeResponse> employeeResponses = employeeMapper.mapEmployeeListToEmployeeResponseList(employees);
 
