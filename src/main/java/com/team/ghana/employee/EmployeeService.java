@@ -2,6 +2,8 @@ package com.team.ghana.employee;
 
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
+import com.team.ghana.strategy.SearchEmployeeStrategy;
+import com.team.ghana.strategy.SearchEmployeeStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private SearchEmployeeStrategyFactory strategyFactory;
 
     public GenericResponse getAllEmployees() {
         List<Employee> employeeList = employeeRepository.findAll();
@@ -31,5 +35,15 @@ public class EmployeeService {
                                 "Bad Input",
                                 "Employee with ID: " + employeeId + " doesn't exist.") ) :
                 new GenericResponse<>(employeeMapper.mapEmployeeToEmployeeResponse(employee));
+    }
+
+    public GenericResponse getEmployeesBySearchCriteria(String searchCriteria, Long id) {
+        List<Employee> allEmployees = employeeRepository.findAll();
+
+        SearchEmployeeStrategy strategy = strategyFactory.makeStrategy(searchCriteria);
+        List<Employee> employees = strategy.execute(allEmployees, id);
+        List<EmployeeResponse> employeeResponses = employeeMapper.mapEmployeeListToEmployeeResponseList(employees);
+
+        return new GenericResponse<>(employeeResponses);
     }
 }

@@ -31,5 +31,11 @@ public class EmployeeController {
                 new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
 
     }
+
+    @GetMapping("/{searchCriteria}/{id}")
+    public ResponseEntity getEmployeesBySearchCriteria(@PathVariable String searchCriteria, @PathVariable Long id) {
+        GenericResponse response = employeeService.getEmployeesBySearchCriteria(searchCriteria, id);
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
+    }
 }
 
