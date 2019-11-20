@@ -2,12 +2,15 @@ package com.team.ghana.employee;
 
 import com.team.ghana.enums.ContractType;
 import com.team.ghana.enums.Status;
+import com.team.ghana.task.Task;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -27,6 +30,8 @@ public class Employee {
     @ManyToOne
     private Unit unit;
     private String position;
+    @ManyToMany
+    private Set<Task> tasks = new HashSet<>();
 
     public Employee() {
     }
@@ -130,5 +135,18 @@ public class Employee {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        task.getEmployees().add(this);
     }
 }
