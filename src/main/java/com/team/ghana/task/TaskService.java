@@ -31,4 +31,14 @@ public class TaskService {
 
         return new GenericResponse<>(taskMapper.mapTaskToTaskResponse(task));
     }
+
+    public GenericResponse getTaskFullInfoByID(Long taskID) {
+        Task task = taskRepository.findTaskById(taskID);
+
+        if(task == null) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskID + " does not exist"));
+        }
+
+        return new GenericResponse<>(taskMapper.mapTaskToTaskFullResponse(task));
+    }
 }

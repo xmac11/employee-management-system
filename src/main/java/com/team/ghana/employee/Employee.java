@@ -149,4 +149,13 @@ public class Employee {
         this.tasks.add(task);
         task.getEmployees().add(this);
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                '}';
+    }
 }

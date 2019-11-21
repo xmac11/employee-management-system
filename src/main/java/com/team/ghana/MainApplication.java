@@ -8,7 +8,6 @@ import com.team.ghana.department.Department;
 import com.team.ghana.department.DepartmentRepository;
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
-import com.team.ghana.enums.TaskStatus;
 import com.team.ghana.task.Task;
 import com.team.ghana.task.TaskRepository;
 import com.team.ghana.unit.Unit;
@@ -20,8 +19,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import static com.team.ghana.enums.ContractType.EXTERNAL;
 import static com.team.ghana.enums.ContractType.UNISYSTEMS;
@@ -101,6 +98,9 @@ public class MainApplication implements CommandLineRunner {
 
 													/* Tasks */
 		Task task1 = new Task("Testing", "Test all methods", 2, 3, 2, NEW);
+		task1.addUpdate("update1");
+		task1.addUpdate("update2");
+		task1.addUpdate("update3");
 		task1.addEmployee(harris);
 		task1.addEmployee(aris);
 

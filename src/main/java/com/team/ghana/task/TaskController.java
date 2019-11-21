@@ -26,6 +26,14 @@ public class TaskController {
         GenericResponse response = taskService.getTasksByID(taskID);
 
         return response.getData() != null ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
-                                             new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+                                            new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/tasks/{taskID}/info")
+    public ResponseEntity getTaskFullInfoByID(@PathVariable Long taskID) {
+        GenericResponse response = taskService.getTaskFullInfoByID(taskID);
+
+        return response.getData() != null ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                                            new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
 }

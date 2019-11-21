@@ -32,4 +32,9 @@ public class TaskMapper {
             return "HARD";
         }
     }
+
+    public TaskFullResponse mapTaskToTaskFullResponse(Task task) {
+        return new TaskFullResponse(task.getId(), task.getTitle(), task.getDescription(), findDifficulty(task),
+                                    task.getStatus().toString(), task.getEmployees().toString(), task.getUpdates());
+    }
 }
