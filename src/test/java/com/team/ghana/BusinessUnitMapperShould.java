@@ -6,46 +6,66 @@ import com.team.ghana.businessUnit.BusinessUnitResponse;
 import com.team.ghana.company.Company;
 import org.junit.Before;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BusinessUnitMapperShould {
 
     private BusinessUnitMapper mapper;
 
-    private BusinessUnit businessUnitInput;
+    private BusinessUnit businessUnitInputH;
+    private BusinessUnit businessUnitInputV;
     private Company companyInput;
-    private BusinessUnitResponse output;
 
     public BusinessUnitMapperShould() {
     }
 
     @Before
     public void setup(){
-        mapper = new BusinessUnitMapper();
-        businessUnitInput = new BusinessUnit("Horizontal",1, companyInput);
-        businessUnitInput.setId(50L);
-        companyInput = new Company("Unisystems","2109235100","Syggroo 145 Athina");
-        companyInput.setId(100L);
-        output = mapper.mapBusinessUnitToBusinessUnitResponse(businessUnitInput);
+        this.mapper = new BusinessUnitMapper();
+        this.businessUnitInputH = new BusinessUnit("Horizontal",1, companyInput);
+        this.businessUnitInputV = new BusinessUnit("Vertical", 2, companyInput);
+        businessUnitInputH.setId(1L);
+        businessUnitInputV.setId(2L);
+        this.companyInput = new Company("Unisystems","2109235100","Syggrou 145 Athina");
+        businessUnitInputV.setCompany(companyInput);
+        businessUnitInputH.setCompany(companyInput);
+        companyInput.setId(3L);
     }
 
     @Test
-    public void keepSameId(){
-        Assert.assertEquals(50,output.getId());
+    @Ignore
+    public void mapBusinessUnitToBusinessUnitResponse() {
+
+        BusinessUnitResponse expected = new BusinessUnitResponse(businessUnitInputH.getId(), businessUnitInputH.getName(), businessUnitInputH.getFloor(),businessUnitInputH.getCompany());
+        BusinessUnitResponse actual = mapper.mapBusinessUnitToBusinessUnitResponse(businessUnitInputH);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void KeepSameName(){
-        Assert.assertEquals(businessUnitInput.getName(),output.getName());
+    @Ignore
+    public void mapBusinessUnitListToBusinessUnitResponseList() {
+        List<BusinessUnit> businessUnits = Arrays.asList(businessUnitInputH,businessUnitInputV);
+
+        List<BusinessUnitResponse> expected = Arrays.asList(new BusinessUnitResponse(businessUnitInputH.getId(), businessUnitInputH.getName(), businessUnitInputH.getFloor(),businessUnitInputH.getCompany()),
+                                                            new BusinessUnitResponse(businessUnitInputV.getId(), businessUnitInputV.getName(), businessUnitInputV.getFloor(),businessUnitInputV.getCompany()));
+        List<BusinessUnitResponse> actual = mapper.mapBusinessUnitListToBusinessUnitResponseList(businessUnits);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void keepSameFloor(){
-        Assert.assertEquals(businessUnitInput.getFloor(),output.getFloor());
-    }
+    public void mapEmptyListToEmptyList() {
+        List<BusinessUnit> businessUnits = new ArrayList<>();
 
-    @Test
-    public void keepSameCompany(){
-        Assert.assertEquals(businessUnitInput.getCompany(),output.getCompany());
+        List<BusinessUnitResponse> expected = new ArrayList<>();
+        List<BusinessUnitResponse> actual = mapper.mapBusinessUnitListToBusinessUnitResponseList(businessUnits);
+
+        Assert.assertEquals(expected, actual);
     }
 }

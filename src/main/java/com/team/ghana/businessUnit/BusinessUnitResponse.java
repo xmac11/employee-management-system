@@ -4,23 +4,23 @@ import com.team.ghana.company.Company;
 
 public class BusinessUnitResponse {
 
-    private long id;
+    private Long id;
     private String name;
     private int floor;
     private Company company;
 
-    public BusinessUnitResponse(long id, String name, int floor, Company company) {
+    public BusinessUnitResponse(Long id, String name, int floor, Company company) {
         this.id = id;
         this.name = name;
         this.floor = floor;
         this.company = company;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

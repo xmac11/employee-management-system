@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 @Component
 public class BusinessUnitMapper {
 
-    public List<BusinessUnitResponse> mapBusinessUnitResponseFromBusinessUnit(List<BusinessUnit> retrievedBusinessUnits){
+    public List<BusinessUnitResponse> mapBusinessUnitListToBusinessUnitResponseList(List<BusinessUnit> retrievedBusinessUnits){
         return retrievedBusinessUnits.stream()
                 .map(this::mapBusinessUnitToBusinessUnitResponse) // .map(businessUnit -> mapBusinessUnitToBusinessUnitResponse(business))
                 .collect(Collectors.toList());

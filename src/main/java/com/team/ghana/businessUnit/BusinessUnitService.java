@@ -5,7 +5,6 @@ import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +18,7 @@ public class BusinessUnitService {
 
     public GenericResponse<BusinessUnitResponse> getAllBusinessUnit(){
         List<BusinessUnit> retrievedBusinessUnits = repository.findAll();
-        List<BusinessUnitResponse> businessUnitResponse = mapper.mapBusinessUnitResponseFromBusinessUnit(retrievedBusinessUnits);
+        List<BusinessUnitResponse> businessUnitResponse = mapper.mapBusinessUnitListToBusinessUnitResponseList(retrievedBusinessUnits);
 
         return new GenericResponse(businessUnitResponse);
     }
