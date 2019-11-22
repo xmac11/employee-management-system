@@ -55,4 +55,5 @@ public class BusinessUnit {
     public void setCompany(Company company) {
         this.company = company;
     }
+
 }

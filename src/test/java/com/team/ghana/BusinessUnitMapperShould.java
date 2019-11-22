@@ -38,7 +38,6 @@ public class BusinessUnitMapperShould {
     }
 
     @Test
-    @Ignore
     public void mapBusinessUnitToBusinessUnitResponse() {
 
         BusinessUnitResponse expected = new BusinessUnitResponse(businessUnitInputH.getId(), businessUnitInputH.getName(), businessUnitInputH.getFloor(),businessUnitInputH.getCompany());
@@ -48,7 +47,6 @@ public class BusinessUnitMapperShould {
     }
 
     @Test
-    @Ignore
     public void mapBusinessUnitListToBusinessUnitResponseList() {
         List<BusinessUnit> businessUnits = Arrays.asList(businessUnitInputH,businessUnitInputV);
 

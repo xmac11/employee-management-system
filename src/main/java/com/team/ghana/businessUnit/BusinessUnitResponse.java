@@ -2,6 +2,8 @@ package com.team.ghana.businessUnit;
 
 import com.team.ghana.company.Company;
 
+import java.util.Objects;
+
 public class BusinessUnitResponse {
 
     private Long id;
@@ -46,5 +48,21 @@ public class BusinessUnitResponse {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BusinessUnitResponse that = (BusinessUnitResponse) o;
+        return floor == that.floor &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(company, that.company);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, floor, company);
     }
 }
