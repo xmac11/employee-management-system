@@ -16,11 +16,11 @@ public class BusinessUnitService {
     @Autowired
     private BusinessUnitMapper mapper;
 
-    public GenericResponse<BusinessUnitResponse> getAllBusinessUnit(){
+    public GenericResponse<List<BusinessUnitResponse>> getAllBusinessUnit(){
         List<BusinessUnit> retrievedBusinessUnits = repository.findAll();
         List<BusinessUnitResponse> businessUnitResponse = mapper.mapBusinessUnitListToBusinessUnitResponseList(retrievedBusinessUnits);
 
-        return new GenericResponse(businessUnitResponse);
+        return new GenericResponse<>(businessUnitResponse);
     }
 
     public GenericResponse<BusinessUnitResponse> getAllBusinessUnitById(Long businessUnitId) {
