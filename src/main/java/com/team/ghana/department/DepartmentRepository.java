@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
@@ -30,4 +32,20 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Override
     @RestResource(exported = false)
     void deleteAll();
+
+    @Override
+    @RestResource(exported = false)
+    <S extends Department> List<S> saveAll(Iterable<S> entities);
+
+    @Override
+    @RestResource(exported = false)
+    void flush();
+
+    @Override
+    @RestResource(exported = false)
+    <S extends Department> S saveAndFlush(S entity);
+
+    @Override
+    @RestResource(exported = false)
+    <S extends Department> S save(S entity);
 }
