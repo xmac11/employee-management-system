@@ -9,7 +9,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -145,9 +147,22 @@ public class Employee {
         this.tasks = tasks;
     }
 
-    public void addTask(Task task) {
+    private void addTask(Task task) {
         this.tasks.add(task);
         task.getEmployees().add(this);
+    }
+
+    public void addTaskIfSameUnit(Task task) {
+        // converted Set to List, because Set does not have a get() method
+        List<Employee> employees = new ArrayList<>(task.getEmployees());
+
+        if(employees.size() == 0 || this.checkIfSameUnit(employees.get(0).getUnit())) {
+            this.addTask(task);
+        }
+    }
+
+    private boolean checkIfSameUnit(Unit otherUnit) {
+        return this.unit.equals(otherUnit);
     }
 
     @Override

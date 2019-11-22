@@ -101,13 +101,14 @@ public class MainApplication implements CommandLineRunner {
 		task1.addUpdate("update1");
 		task1.addUpdate("update2");
 		task1.addUpdate("update3");
-		task1.addEmployee(harris);
-		task1.addEmployee(aris);
+		task1.addEmployeeIfSameUnit(harris);
+		task1.addEmployeeIfSameUnit(aris);
+		task1.addEmployeeIfSameUnit(kostas); // different unit, this should not be added
 
 		Task task2 = new Task("Debugging", "Debug all methods", 2, 4, 10, NEW);
-		task2.addEmployee(kostas);
-		task2.addEmployee(iosif);
-		dimitris.addTask(task2);
+		task2.addEmployeeIfSameUnit(kostas);
+		task2.addEmployeeIfSameUnit(iosif); // different unit, this should not be added
+		dimitris.addTaskIfSameUnit(task2); // different unit, this should not be added
 
 		// save Company
 		companyRepository.save(company);

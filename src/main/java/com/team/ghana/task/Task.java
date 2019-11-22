@@ -2,6 +2,7 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.enums.TaskStatus;
+import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -119,9 +120,22 @@ public class Task {
         this.employees = employees;
     }
 
-    public void addEmployee(Employee employee) {
+    private void addEmployee(Employee employee) {
         this.employees.add(employee);
         employee.getTasks().add(this);
+    }
+
+    public void addEmployeeIfSameUnit(Employee employee) {
+        // converted Set to List, because Set does not have a get() method
+        List<Employee> employeeList = new ArrayList<>(this.employees);
+
+        if(employeeList.size() == 0 || this.checkIfSameUnit(employeeList.get(0).getUnit(), employee.getUnit())) {
+            this.addEmployee(employee);
+        }
+    }
+
+    private boolean checkIfSameUnit(Unit unit, Unit otherUnit) {
+        return unit.equals(otherUnit);
     }
 
     public void addUpdate(String update) {
