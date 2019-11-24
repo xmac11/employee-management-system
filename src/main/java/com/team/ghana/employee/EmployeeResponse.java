@@ -11,11 +11,10 @@ public class EmployeeResponse {
     private String workingPeriod;
     private String status;
     private String contractType;
-    private String companyName;
     private String unitName;
     private String position;
 
-    public EmployeeResponse(Long id, String fullName, String homeAddress, String phoneNumber, String workingPeriod, String status, String contractType, String companyName, String unitName, String position) {
+    public EmployeeResponse(Long id, String fullName, String homeAddress, String phoneNumber, String workingPeriod, String status, String contractType, String unitName, String position) {
         this.id = id;
         this.fullName = fullName;
         this.homeAddress = homeAddress;
@@ -23,7 +22,6 @@ public class EmployeeResponse {
         this.workingPeriod = workingPeriod;
         this.status = status;
         this.contractType = contractType;
-        this.companyName = companyName;
         this.unitName = unitName;
         this.position = position;
     }
@@ -84,14 +82,6 @@ public class EmployeeResponse {
         this.contractType = contractType;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     public String getUnitName() {
         return unitName;
     }
@@ -110,23 +100,24 @@ public class EmployeeResponse {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         EmployeeResponse that = (EmployeeResponse) o;
-        return id.equals(that.id) &&
-                fullName.equals(that.fullName) &&
-                homeAddress.equals(that.homeAddress) &&
-                phoneNumber.equals(that.phoneNumber) &&
-                workingPeriod.equals(that.workingPeriod) &&
-                status.equals(that.status) &&
-                contractType.equals(that.contractType) &&
-                companyName.equals(that.companyName) &&
-                unitName.equals(that.unitName) &&
-                position.equals(that.position);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(fullName, that.fullName) &&
+                Objects.equals(homeAddress, that.homeAddress) &&
+                Objects.equals(phoneNumber, that.phoneNumber) &&
+                Objects.equals(workingPeriod, that.workingPeriod) &&
+                Objects.equals(status, that.status) &&
+                Objects.equals(contractType, that.contractType) &&
+                Objects.equals(unitName, that.unitName) &&
+                Objects.equals(position, that.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fullName, homeAddress, phoneNumber, workingPeriod, status, contractType, companyName, unitName, position);
+        return Objects.hash(id, fullName, homeAddress, phoneNumber, workingPeriod, status, contractType, unitName, position);
     }
 }
