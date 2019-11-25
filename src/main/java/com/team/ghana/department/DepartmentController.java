@@ -2,11 +2,16 @@ package com.team.ghana.department;
 
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class DepartmentController {
@@ -28,5 +33,11 @@ public class DepartmentController {
         return new ResponseEntity<>(response.getData() != null ? response.getData() : response.getError(),
                             null,
                                     response.getData() != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/departments")
+    public ResponseEntity postDepartment(@Valid @RequestBody Department department) {
+        GenericResponse response = departmentService.postDepartment(department);
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
     }
 }

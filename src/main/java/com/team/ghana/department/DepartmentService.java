@@ -32,6 +32,12 @@ public class DepartmentService {
             return new GenericResponse<>(new CustomError(0, "Error", "Department with ID: " + departmentID + " does not exist"));
         }
 
-        return new GenericResponse<>(departmentMapper.mapDepartmentToDepartmentResponse(department));
+        return new GenericResponse<>(/*departmentMapper.mapDepartmentToDepartmentResponse(*/department/*)*/);
+    }
+
+    public GenericResponse postDepartment(Department department) {
+        Department addedDepartment = departmentRepository.save(department);
+
+        return new GenericResponse<>("Department " + department.getName() + "with ID " + addedDepartment.getId() + " was successfully added.");
     }
 }
