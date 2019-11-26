@@ -41,6 +41,10 @@ public class DepartmentService {
     // TODO: Check if company's ID exists as well?
     // TODO: Should the postman json include only BusinessUnit and Company ID's and fill everything else automatically?
     public GenericResponse postDepartment(Department department) {
+        if(department.getId() != null) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Department's ID is set automatically, do not try to set it"));
+        }
+
         Long businessUnitID = department.getBusinessUnit().getId();
         if(!businessUnitRepository.findById(businessUnitID).isPresent()) {
             return new GenericResponse<>(new CustomError(0, "Error", "Business Unit with ID: " + businessUnitID + " does not exist"));
@@ -50,5 +54,21 @@ public class DepartmentService {
 
         return new GenericResponse<>("Department " + addedDepartment.getName() + " with ID " + addedDepartment.getId() +
                 " was successfully added to Business Unit with ID " + businessUnitID);
+    }
+
+    public GenericResponse putDepartment(Department newDepartment, Long departmentID) {
+        if(!departmentRepository.findById(departmentID).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Department Unit with ID: " + departmentID + " does not exist"));
+        }
+
+        Long businessUnitID = newDepartment.getBusinessUnit().getId();
+        if(!businessUnitRepository.findById(businessUnitID).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Business Unit with ID: " + businessUnitID + " does not exist"));
+        }
+
+        newDepartment.setId(departmentID);
+        Department addedDepartment = departmentRepository.save(newDepartment);
+
+        return new GenericResponse<>("Department " + addedDepartment.getName() + " with ID " + addedDepartment.getId() + " was successfully replaced.");
     }
 }

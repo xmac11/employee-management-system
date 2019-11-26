@@ -12,7 +12,7 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Null(message = "Department's ID is set automatically, do not try to set it")
+    //@Null(message = "Department's ID is set automatically, do not try to set it")
     private Long id;
 
     @NotBlank(message = "Department's name must not be blank")

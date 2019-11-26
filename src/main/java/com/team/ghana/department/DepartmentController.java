@@ -30,17 +30,27 @@ public class DepartmentController {
     public ResponseEntity getDepartmentByID(@PathVariable Long departmentID) {
         GenericResponse response = departmentService.getDepartmentByID(departmentID);
 
-        return new ResponseEntity<>(response.getData() != null ? response.getData() : response.getError(),
-                            null,
-                                    response.getData() != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/departments")
     public ResponseEntity postDepartment(@Valid @RequestBody Department department) {
         GenericResponse response = departmentService.postDepartment(department);
 
-        return new ResponseEntity<>(response.getData() != null ? response.getData() : response.getError(),
-                null,
-                response.getData() != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.CREATED) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+    }
+
+    // TODO: departmentID in url or json body?
+    @PutMapping("/departments/{departmentID}")
+    public ResponseEntity putDepartment(@Valid @RequestBody Department newDepartment, @PathVariable Long departmentID) {
+        GenericResponse response = departmentService.putDepartment(newDepartment, departmentID);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
 }
