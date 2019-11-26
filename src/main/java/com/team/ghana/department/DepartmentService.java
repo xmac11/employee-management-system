@@ -28,19 +28,19 @@ public class DepartmentService {
         return new GenericResponse<>(departmentResponses);
     }
 
-    public GenericResponse getDepartmentByID(Long departmentID) {
+    public GenericResponse<DepartmentResponse> getDepartmentByID(Long departmentID) {
         Department department = departmentRepository.findById(departmentID).orElse(null);
 
         if(department == null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department with ID: " + departmentID + " does not exist"));
         }
 
-        return new GenericResponse<>(/*departmentMapper.mapDepartmentToDepartmentResponse(*/department/*)*/);
+        return new GenericResponse<>(departmentMapper.mapDepartmentToDepartmentResponse(department));
     }
 
     // TODO: Check if company's ID exists as well?
     // TODO: Should the postman json include only BusinessUnit and Company ID's and fill everything else automatically?
-    public GenericResponse postDepartment(Department department) {
+    public GenericResponse<Department> postDepartment(Department department) {
         if(department.getId() != null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department's ID is set automatically, do not try to set it"));
         }
@@ -52,8 +52,7 @@ public class DepartmentService {
 
         Department addedDepartment = departmentRepository.save(department);
 
-        return new GenericResponse<>("Department " + addedDepartment.getName() + " with ID " + addedDepartment.getId() +
-                " was successfully added to Business Unit with ID " + businessUnitID);
+        return new GenericResponse<>(addedDepartment);
     }
 
     public GenericResponse putDepartment(Department newDepartment, Long departmentID) {

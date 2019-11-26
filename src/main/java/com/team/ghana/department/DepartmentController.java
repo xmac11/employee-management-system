@@ -2,16 +2,11 @@ package com.team.ghana.department;
 
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class DepartmentController {
@@ -39,9 +34,11 @@ public class DepartmentController {
     public ResponseEntity postDepartment(@Valid @RequestBody Department department) {
         GenericResponse response = departmentService.postDepartment(department);
 
-        return response.getData() != null ?
-                new ResponseEntity<>(response.getData(),null, HttpStatus.CREATED) :
-                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+        if(response.getError() != null) {
+            return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>((Department) response.getData(), null, HttpStatus.OK);
     }
 
     // TODO: departmentID in url or json body?
@@ -53,4 +50,6 @@ public class DepartmentController {
                 new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
                 new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
+
+    //@PatchMapping("/departments")
 }
