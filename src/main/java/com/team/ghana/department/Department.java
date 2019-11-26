@@ -4,15 +4,21 @@ import com.team.ghana.businessUnit.BusinessUnit;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Entity
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Null(message = "Department's ID is set automatically, do not try to set it")
     private Long id;
+
     @NotBlank(message = "Department's name must not be blank")
     private String name;
+
+    @NotNull(message = "Business Unit must not be null")
     @ManyToOne
     private BusinessUnit businessUnit;
 

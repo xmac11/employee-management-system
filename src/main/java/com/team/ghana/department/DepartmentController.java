@@ -38,6 +38,9 @@ public class DepartmentController {
     @PostMapping("/departments")
     public ResponseEntity postDepartment(@Valid @RequestBody Department department) {
         GenericResponse response = departmentService.postDepartment(department);
-        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
+
+        return new ResponseEntity<>(response.getData() != null ? response.getData() : response.getError(),
+                null,
+                response.getData() != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

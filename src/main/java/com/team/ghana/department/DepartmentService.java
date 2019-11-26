@@ -1,12 +1,12 @@
 package com.team.ghana.department;
 
+import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DepartmentService {
@@ -16,6 +16,9 @@ public class DepartmentService {
 
     @Autowired
     private DepartmentMapper departmentMapper;
+
+    @Autowired
+    private BusinessUnitRepository businessUnitRepository;
 
     public GenericResponse getDepartments() {
         List<Department> retrievedDepartments = departmentRepository.findAll();
@@ -35,9 +38,17 @@ public class DepartmentService {
         return new GenericResponse<>(/*departmentMapper.mapDepartmentToDepartmentResponse(*/department/*)*/);
     }
 
+    // TODO: Check if company's ID exists as well?
+    // TODO: Should the postman json include only BusinessUnit and Company ID's and fill everything else automatically?
     public GenericResponse postDepartment(Department department) {
+        Long businessUnitID = department.getBusinessUnit().getId();
+        if(!businessUnitRepository.findById(businessUnitID).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Business Unit with ID: " + businessUnitID + " does not exist"));
+        }
+
         Department addedDepartment = departmentRepository.save(department);
 
-        return new GenericResponse<>("Department " + department.getName() + "with ID " + addedDepartment.getId() + " was successfully added.");
+        return new GenericResponse<>("Department " + addedDepartment.getName() + " with ID " + addedDepartment.getId() +
+                " was successfully added to Business Unit with ID " + businessUnitID);
     }
 }
