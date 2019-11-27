@@ -13,10 +13,10 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Department's name must not be blank")
+    @NotBlank(message = "Department's name must not be blank or field not valid")
     private String name;
 
-    @NotNull(message = "Business Unit must not be null")
+    @NotNull(message = "Business Unit must not be null or field not valid")
     @ManyToOne
     private BusinessUnit businessUnit;
 

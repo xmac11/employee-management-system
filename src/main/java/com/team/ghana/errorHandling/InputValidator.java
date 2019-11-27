@@ -72,5 +72,14 @@ public class InputValidator {
         return null;
     }
 
+    /**
+     * Method which handles invalid field name in PATCH requests.
+     */
+    @ExceptionHandler(FieldNotFoundException.class)
+    @ResponseBody
+    public String handleFieldNotFound(FieldNotFoundException e) {
+        System.out.println("handleFieldNotFound() was triggered");
+        return e.getMessage();
+    }
 
 }

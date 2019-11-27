@@ -2,6 +2,7 @@ package com.team.ghana.department;
 
 import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.errorHandling.CustomError;
+import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,9 +88,11 @@ public class DepartmentService {
         * */
         map.forEach((property, value) -> {
             Field field = ReflectionUtils.findField(Department.class, property);
-            if (field != null) {
-                field.setAccessible(true);
+            if(field == null) {
+                throw new FieldNotFoundException(property + " is not a valid field");
             }
+
+            field.setAccessible(true);
             ReflectionUtils.setField(field, retrievedDepartment, value);
         });
 
