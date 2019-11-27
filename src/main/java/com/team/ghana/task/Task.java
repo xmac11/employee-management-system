@@ -5,6 +5,7 @@ import com.team.ghana.enums.TaskStatus;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,13 +18,15 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Title must not be blank")
     private String title;
+    @NotBlank(message = "Description must no be blank")
     private String description;
-    @Positive(message = "Estimation must be positive")
+    @Positive(message = "EstimationA must be positive")
     private int estimationA;
-    @Positive(message = "Estimation must be positive")
+    @Positive(message = "EstimationB must be positive")
     private int estimationB;
-    @Positive(message = "Estimation must be positive")
+    @Positive(message = "EstimationC must be positive")
     private int estimationC;
     private TaskStatus status;
     @ElementCollection

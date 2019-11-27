@@ -1,16 +1,13 @@
 package com.team.ghana.task;
 
-import com.team.ghana.employee.Employee;
-import com.team.ghana.enums.TaskStatus;
+import com.team.ghana.employee.EmployeeResponse;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.Positive;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * This class is used as the response printed when performing a POST request of a task,
+ * in order to verify and inspect the fields that were added.
+ */
 public class TaskDebugResponse {
 
     private Long id;
@@ -20,11 +17,11 @@ public class TaskDebugResponse {
     private int estimationB;
     private int estimationC;
     private String status;
-    private List<String> updates = new ArrayList<>();
-    private Set<Employee> employees = new HashSet<>();
+    private List<String> updates;
+    private List<EmployeeResponse> employees;
 
     public TaskDebugResponse(Long id, String title, String description, int estimationA, int estimationB, int estimationC,
-                             String status, List<String> updates, Set<Employee> employees) {
+                             String status, List<String> updates, List<EmployeeResponse> employees) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -100,11 +97,11 @@ public class TaskDebugResponse {
         this.updates = updates;
     }
 
-    public Set<Employee> getEmployees() {
+    public List<EmployeeResponse> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(List<EmployeeResponse> employees) {
         this.employees = employees;
     }
 }
