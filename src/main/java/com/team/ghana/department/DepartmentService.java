@@ -5,8 +5,11 @@ import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DepartmentService {
@@ -69,5 +72,29 @@ public class DepartmentService {
         Department addedDepartment = departmentRepository.save(newDepartment);
 
         return new GenericResponse<>(addedDepartment);
+    }
+
+    public GenericResponse<Department> patchDepartment(Map<String, Object> map, Long departmentID) {
+        if(!departmentRepository.findById(departmentID).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Department Unit with ID: " + departmentID + " does not exist"));
+        }
+
+        Department retrievedDepartment = departmentRepository.findDepartmentById(departmentID);
+
+        /*
+        * -- Reflection
+        * https://stackoverflow.com/questions/45200142/spring-rest-partial-update-with-patch-method
+        * */
+        map.forEach((property, value) -> {
+            Field field = ReflectionUtils.findField(Department.class, property);
+            if (field != null) {
+                field.setAccessible(true);
+            }
+            ReflectionUtils.setField(field, retrievedDepartment, value);
+        });
+
+        Department updatedDepartment = departmentRepository.save(retrievedDepartment);
+
+        return new GenericResponse<>(updatedDepartment);
     }
 }
