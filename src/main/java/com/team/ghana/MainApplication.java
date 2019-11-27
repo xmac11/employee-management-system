@@ -98,14 +98,15 @@ public class MainApplication implements CommandLineRunner {
 
 													/* Tasks */
 		Task task1 = new Task("Testing", "Test all methods", 2, 3, 2, NEW);
-		task1.addUpdate("update1");
-		task1.addUpdate("update2");
-		task1.addUpdate("update3");
+		task1.addUpdate("Did requirements analysis");
+		task1.addUpdate("Created UML diagrams");
+		task1.addUpdate("Started programming");
 		task1.addEmployeeIfSameUnit(harris);
 		task1.addEmployeeIfSameUnit(aris);
 		task1.addEmployeeIfSameUnit(kostas); // different unit, this should not be added
 
 		Task task2 = new Task("Debugging", "Debug all methods", 2, 4, 10, NEW);
+		task2.addUpdate("Talked with client");
 		task2.addEmployeeIfSameUnit(kostas);
 		task2.addEmployeeIfSameUnit(iosif); // different unit, this should not be added
 		dimitris.addTaskIfSameUnit(task2); // different unit, this should not be added

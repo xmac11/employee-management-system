@@ -4,9 +4,9 @@ import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class TaskController {
@@ -35,5 +35,14 @@ public class TaskController {
 
         return response.getData() != null ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
                                             new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/tasks")
+    public ResponseEntity postTask(@Valid @RequestBody Task task) {
+        GenericResponse response = taskService.postTask(task);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
 }

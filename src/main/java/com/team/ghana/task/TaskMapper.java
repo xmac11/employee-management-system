@@ -1,5 +1,8 @@
 package com.team.ghana.task;
 
+import com.team.ghana.employee.EmployeeMapper;
+import com.team.ghana.employee.EmployeeResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -7,6 +10,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class TaskMapper {
+
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
     public List<TaskResponse> mapTaskListToTaskResponseList(List<Task> tasks) {
         return tasks.stream()
@@ -34,7 +40,26 @@ public class TaskMapper {
     }
 
     public TaskFullResponse mapTaskToTaskFullResponse(Task task) {
-        return new TaskFullResponse(task.getId(), task.getTitle(), task.getDescription(), findDifficulty(task),
-                                    task.getStatus().toString(), task.getEmployees().toString(), task.getUpdates());
+        return new TaskFullResponse(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                this.findDifficulty(task),
+                task.getStatus().toString(),
+                employeeMapper.mapEmployeeListToEmployeeResponseList(task.getEmployees()),
+                task.getUpdates());
+    }
+
+    public TaskDebugResponse mapTaskToDebugResponse(Task task) {
+        return new TaskDebugResponse(
+               task.getId(),
+               task.getTitle(),
+               task.getDescription(),
+               task.getEstimationA(),
+               task.getEstimationB(),
+               task.getEstimationC(),
+               task.getStatus().toString(),
+               task.getUpdates(),
+               task.getEmployees());
     }
 }

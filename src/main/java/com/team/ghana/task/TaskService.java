@@ -41,4 +41,13 @@ public class TaskService {
 
         return new GenericResponse<>(taskMapper.mapTaskToTaskFullResponse(task));
     }
+
+    public GenericResponse<TaskDebugResponse> postTask(Task task) {
+        if(task.getId() != null) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Task's ID is set automatically, do not try to set it"));
+        }
+
+        Task addedTask = taskRepository.save(task);
+        return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(addedTask));
+    }
 }

@@ -164,13 +164,4 @@ public class Employee {
     private boolean checkIfSameUnit(Unit otherUnit) {
         return this.unit.equals(otherUnit);
     }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                '}';
-    }
 }

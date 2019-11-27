@@ -2,45 +2,38 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.enums.TaskStatus;
-import com.team.ghana.unit.Unit;
 
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-public class Task {
+public class TaskDebugResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
-    @Positive(message = "Estimation must be positive")
     private int estimationA;
-    @Positive(message = "Estimation must be positive")
     private int estimationB;
-    @Positive(message = "Estimation must be positive")
     private int estimationC;
-    private TaskStatus status;
-    @ElementCollection
+    private String status;
     private List<String> updates = new ArrayList<>();
-    @ManyToMany(mappedBy = "tasks")
     private Set<Employee> employees = new HashSet<>();
 
-    public Task() {
-    }
-
-    public Task(String title, String description, int estimationA, int estimationB, int estimationC, TaskStatus status) {
+    public TaskDebugResponse(Long id, String title, String description, int estimationA, int estimationB, int estimationC,
+                             String status, List<String> updates, Set<Employee> employees) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.estimationA = estimationA;
         this.estimationB = estimationB;
         this.estimationC = estimationC;
         this.status = status;
+        this.updates = updates;
+        this.employees = employees;
     }
 
     public Long getId() {
@@ -91,11 +84,11 @@ public class Task {
         this.estimationC = estimationC;
     }
 
-    public TaskStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -113,42 +106,5 @@ public class Task {
 
     public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
-    }
-
-    private void addEmployee(Employee employee) {
-        this.employees.add(employee);
-        employee.getTasks().add(this);
-    }
-
-    public void addEmployeeIfSameUnit(Employee employee) {
-        // converted Set to List, because Set does not have a get() method
-        List<Employee> employeeList = new ArrayList<>(this.employees);
-
-        if(employeeList.size() == 0 || this.checkIfSameUnit(employeeList.get(0).getUnit(), employee.getUnit())) {
-            this.addEmployee(employee);
-        }
-    }
-
-    private boolean checkIfSameUnit(Unit unit, Unit otherUnit) {
-        return unit.equals(otherUnit);
-    }
-
-    public void addUpdate(String update) {
-        this.updates.add(update);
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", estimationA=" + estimationA +
-                ", estimationB=" + estimationB +
-                ", estimationC=" + estimationC +
-                ", status=" + status +
-                ", updates=" + updates +
-                ", employees=" + employees +
-                '}';
     }
 }

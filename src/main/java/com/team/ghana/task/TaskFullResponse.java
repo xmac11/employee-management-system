@@ -1,32 +1,34 @@
 package com.team.ghana.task;
 
 
+import com.team.ghana.employee.EmployeeResponse;
+
 import java.util.List;
 
 public class TaskFullResponse extends TaskResponse {
 
-    private String assignedEmployees;
-    private String updates;
+    private List<EmployeeResponse> assignedEmployees;
+    private List<String> updates;
 
-    public TaskFullResponse(Long id, String title, String description, String difficulty, String status, String assignedEmployees, String updates) {
+    public TaskFullResponse(Long id, String title, String description, String difficulty, String status, List<EmployeeResponse> assignedEmployees, List<String> updates) {
         super(id, title, description, difficulty, status);
         this.assignedEmployees = assignedEmployees;
         this.updates = updates;
     }
 
-    public String getAssignedEmployees() {
+    public List<EmployeeResponse> getAssignedEmployees() {
         return assignedEmployees;
     }
 
-    public void setAssignedEmployees(String assignedEmployees) {
+    public void setAssignedEmployees(List<EmployeeResponse> assignedEmployees) {
         this.assignedEmployees = assignedEmployees;
     }
 
-    public String getUpdates() {
+    public List<String> getUpdates() {
         return updates;
     }
 
-    public void setUpdates(String updates) {
+    public void setUpdates(List<String> updates) {
         this.updates = updates;
     }
 }
