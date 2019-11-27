@@ -46,9 +46,11 @@ public class DepartmentController {
     public ResponseEntity putDepartment(@Valid @RequestBody Department newDepartment, @PathVariable Long departmentID) {
         GenericResponse response = departmentService.putDepartment(newDepartment, departmentID);
 
-        return response.getData() != null ?
-                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
-                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+        if(response.getError() != null) {
+            return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>((Department) response.getData(), null, HttpStatus.OK);
     }
 
     //@PatchMapping("/departments")

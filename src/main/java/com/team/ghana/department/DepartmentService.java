@@ -55,7 +55,7 @@ public class DepartmentService {
         return new GenericResponse<>(addedDepartment);
     }
 
-    public GenericResponse putDepartment(Department newDepartment, Long departmentID) {
+    public GenericResponse<Department> putDepartment(Department newDepartment, Long departmentID) {
         if(!departmentRepository.findById(departmentID).isPresent()) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department Unit with ID: " + departmentID + " does not exist"));
         }
@@ -68,6 +68,6 @@ public class DepartmentService {
         newDepartment.setId(departmentID);
         Department addedDepartment = departmentRepository.save(newDepartment);
 
-        return new GenericResponse<>("Department " + addedDepartment.getName() + " with ID " + addedDepartment.getId() + " was successfully replaced.");
+        return new GenericResponse<>(addedDepartment);
     }
 }
