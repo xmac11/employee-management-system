@@ -61,7 +61,7 @@ public class DepartmentService {
 
     public GenericResponse<Department> putDepartment(Department newDepartment, Long departmentID) {
         if(!departmentRepository.findById(departmentID).isPresent()) {
-            return new GenericResponse<>(new CustomError(0, "Error", "Department Unit with ID: " + departmentID + " does not exist"));
+            return new GenericResponse<>(new CustomError(0, "Error", "Department with ID: " + departmentID + " does not exist"));
         }
 
         Long businessUnitID = newDepartment.getBusinessUnit().getId();

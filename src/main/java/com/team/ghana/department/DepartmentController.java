@@ -40,10 +40,9 @@ public class DepartmentController {
             return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>((Department) response.getData(), null, HttpStatus.OK);
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
     }
 
-    // TODO: departmentID in url or json body?
     @PutMapping("/departments/{departmentID}")
     public ResponseEntity putDepartment(@Valid @RequestBody Department newDepartment, @PathVariable Long departmentID) {
         GenericResponse response = departmentService.putDepartment(newDepartment, departmentID);
@@ -52,7 +51,7 @@ public class DepartmentController {
             return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>((Department) response.getData(), null, HttpStatus.OK);
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
     }
 
     @PatchMapping("/departments/{departmentID}")
@@ -63,6 +62,6 @@ public class DepartmentController {
             return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>((Department) response.getData(), null, HttpStatus.OK);
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
     }
 }
