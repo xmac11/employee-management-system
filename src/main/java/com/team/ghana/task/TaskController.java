@@ -45,4 +45,13 @@ public class TaskController {
                 new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
                 new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
+
+    @PutMapping("/tasks/{taskId}")
+    public ResponseEntity putTask(@Valid @RequestBody Task task, @PathVariable Long taskId) {
+        GenericResponse response = taskService.putTask(task, taskId);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
 }

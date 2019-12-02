@@ -57,6 +57,10 @@ public class TaskService {
             return response;
         }
 
+        for(Employee employee: task.getEmployees()) {
+            task.addEmployee(employee);
+        }
+
         Task addedTask = taskRepository.save(task);
         return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(addedTask));
     }
@@ -78,5 +82,26 @@ public class TaskService {
         }
         task.setEmployees(employees);
         return new GenericResponse<>("Successful");
+    }
+
+    public GenericResponse putTask(Task task, Long taskId) {
+        if(!taskRepository.findById(taskId).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskId + " does not exist"));
+        }
+
+        task.setId(taskId);
+
+        GenericResponse response = setEmployeePropertiesOfTask(task);
+        if(response.getError() != null) {
+            return response;
+        }
+
+        for(Employee employee: task.getEmployees()) {
+            task.addEmployee(employee);
+        }
+
+        Task addedTask = taskRepository.save(task);
+
+        return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(addedTask));
     }
 }

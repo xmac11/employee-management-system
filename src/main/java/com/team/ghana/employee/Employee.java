@@ -32,7 +32,7 @@ public class Employee {
     @ManyToOne
     private Unit unit;
     private String position;
-    @ManyToMany
+    @ManyToMany(mappedBy = "employees")
     private Set<Task> tasks = new HashSet<>();
 
     public Employee() {
@@ -163,5 +163,9 @@ public class Employee {
 
     private boolean checkIfSameUnit(Unit otherUnit) {
         return this.unit.equals(otherUnit);
+    }
+
+    public void removeTask(Task task) {
+        this.tasks.remove(task);
     }
 }

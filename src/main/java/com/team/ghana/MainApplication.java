@@ -134,9 +134,7 @@ public class MainApplication implements CommandLineRunner {
 		unitRepository.save(auditing);
 		unitRepository.save(accounting);
 
-		// save Tasks
-		taskRepository.save(task1);
-		taskRepository.save(task2);
+
 
 		// save Employees
 		employeeRepository.save(harris);
@@ -146,5 +144,9 @@ public class MainApplication implements CommandLineRunner {
 		employeeRepository.save(dimitris);
 		employeeRepository.save(eleni);
 		employeeRepository.save(maria);
+
+		// save Tasks
+		taskRepository.save(task1);
+		taskRepository.save(task2);
 	}
 }

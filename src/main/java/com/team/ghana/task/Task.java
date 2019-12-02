@@ -31,7 +31,7 @@ public class Task {
     private TaskStatus status;
     @ElementCollection
     private List<String> updates = new ArrayList<>();
-    @ManyToMany(mappedBy = "tasks")
+    @ManyToMany
     private Set<Employee> employees = new HashSet<>();
 
     public Task() {
@@ -118,7 +118,8 @@ public class Task {
         this.employees = employees;
     }
 
-    private void addEmployee(Employee employee) {
+    //
+    public void addEmployee(Employee employee) {
         this.employees.add(employee);
         employee.getTasks().add(this);
     }
@@ -138,20 +139,5 @@ public class Task {
 
     public void addUpdate(String update) {
         this.updates.add(update);
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", estimationA=" + estimationA +
-                ", estimationB=" + estimationB +
-                ", estimationC=" + estimationC +
-                ", status=" + status +
-                ", updates=" + updates +
-                ", employees=" + employees +
-                '}';
     }
 }
