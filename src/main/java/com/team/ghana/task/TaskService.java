@@ -7,7 +7,10 @@ import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class TaskService {
@@ -89,8 +92,14 @@ public class TaskService {
             return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskId + " does not exist"));
         }
 
+        Set<Employee> employeeSet = new HashSet<>(task.getEmployees());
+        Task originalTask = taskRepository.findTaskById(taskId);
         task.setId(taskId);
+        for(Employee employee: new HashSet<>(originalTask.getEmployees())) {
+            employee.removeTask(originalTask);
+        }
 
+        task.setEmployees(employeeSet);
         GenericResponse response = setEmployeePropertiesOfTask(task);
         if(response.getError() != null) {
             return response;
@@ -101,6 +110,7 @@ public class TaskService {
         }
 
         Task addedTask = taskRepository.save(task);
+
 
         return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(addedTask));
     }

@@ -32,7 +32,7 @@ public class Employee {
     @ManyToOne
     private Unit unit;
     private String position;
-    @ManyToMany(mappedBy = "employees")
+    @ManyToMany
     private Set<Task> tasks = new HashSet<>();
 
     public Employee() {
@@ -167,5 +167,6 @@ public class Employee {
 
     public void removeTask(Task task) {
         this.tasks.remove(task);
+        task.getEmployees().remove(this);
     }
 }
