@@ -9,10 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Employee {
@@ -168,5 +165,31 @@ public class Employee {
     public void removeTask(Task task) {
         this.tasks.remove(task);
         task.getEmployees().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(homeAddress, employee.homeAddress) &&
+                Objects.equals(phoneNumber, employee.phoneNumber) &&
+                Objects.equals(hireDate, employee.hireDate) &&
+                Objects.equals(redundancyDate, employee.redundancyDate) &&
+                status == employee.status &&
+                contractType == employee.contractType &&
+                Objects.equals(unit, employee.unit) &&
+                Objects.equals(position, employee.position) &&
+                Objects.equals(tasks, employee.tasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, homeAddress, phoneNumber, hireDate, redundancyDate, status, contractType, unit, position, tasks);
     }
 }

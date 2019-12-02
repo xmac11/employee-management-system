@@ -138,7 +138,7 @@ public class Task {
         this.updates.add(update);
     }
 
-    public void removeEmployee(Employee employee) {
+    private void removeEmployee(Employee employee) {
         this.employees.remove(employee);
         employee.getTasks().remove(this);
     }
@@ -147,28 +147,5 @@ public class Task {
         for(Employee employee: new ArrayList<>(employees)) {
             this.removeEmployee(employee);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Task task = (Task) o;
-        return estimationA == task.estimationA &&
-                estimationB == task.estimationB &&
-                estimationC == task.estimationC &&
-                Objects.equals(id, task.id) &&
-                Objects.equals(title, task.title) &&
-                Objects.equals(description, task.description) &&
-                status == task.status &&
-                Objects.equals(updates, task.updates) &&
-                Objects.equals(employees, task.employees);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, description, estimationA, estimationB, estimationC, status, updates, employees);
     }
 }

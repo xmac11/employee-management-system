@@ -92,14 +92,9 @@ public class TaskService {
             return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskId + " does not exist"));
         }
 
-        Set<Employee> employeeSet = new HashSet<>(task.getEmployees());
         Task originalTask = taskRepository.findTaskById(taskId);
-        task.setId(taskId);
-        for(Employee employee: new HashSet<>(originalTask.getEmployees())) {
-            employee.removeTask(originalTask);
-        }
+        originalTask.removeAllEmployees();
 
-        task.setEmployees(employeeSet);
         GenericResponse response = setEmployeePropertiesOfTask(task);
         if(response.getError() != null) {
             return response;
@@ -109,8 +104,8 @@ public class TaskService {
             task.addEmployee(employee);
         }
 
+        task.setId(taskId);
         Task addedTask = taskRepository.save(task);
-
 
         return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(addedTask));
     }
