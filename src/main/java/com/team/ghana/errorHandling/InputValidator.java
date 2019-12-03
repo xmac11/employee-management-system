@@ -1,5 +1,6 @@
 package com.team.ghana.errorHandling;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -79,6 +80,13 @@ public class InputValidator {
     @ResponseBody
     public String handleFieldNotFound(FieldNotFoundException e) {
         System.out.println("handleFieldNotFound() was triggered");
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    @ResponseBody
+    public String handleInvalidFormatException(InvalidFormatException e) {
+        System.out.println("handleInvalidFormatException() was triggered");
         return e.getMessage();
     }
 

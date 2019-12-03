@@ -6,6 +6,7 @@ import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.*;
 
@@ -25,6 +26,7 @@ public class Task {
     private int estimationB;
     @Positive(message = "EstimationC must be positive")
     private int estimationC;
+    @NotNull(message = "Status must not be null")
     private TaskStatus status;
     @ElementCollection
     private List<String> updates = new ArrayList<>();
@@ -138,7 +140,7 @@ public class Task {
         this.updates.add(update);
     }
 
-    private void removeEmployee(Employee employee) {
+    public void removeEmployee(Employee employee) {
         this.employees.remove(employee);
         employee.getTasks().remove(this);
     }

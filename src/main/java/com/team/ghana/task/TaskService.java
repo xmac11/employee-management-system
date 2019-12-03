@@ -3,14 +3,16 @@ package com.team.ghana.task;
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
 import com.team.ghana.errorHandling.CustomError;
+import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -108,5 +110,98 @@ public class TaskService {
         Task addedTask = taskRepository.save(task);
 
         return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(addedTask));
+    }
+
+    public GenericResponse patchTask(Map<String, Object> map, Long taskId) {
+        if(!taskRepository.findById(taskId).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskId + " does not exist"));
+        }
+
+        Task retrievedTask = taskRepository.findTaskById(taskId);
+        Set<Employee> originalEmployees = retrievedTask.getEmployees(); // A
+
+        map.forEach((property, value) -> {
+            Field field = ReflectionUtils.findField(Task.class, property);
+            if(field == null) {
+                throw new FieldNotFoundException(property + " is not a valid field");
+            }
+            field.setAccessible(true);
+
+            Type type = field.getGenericType();
+            if(type instanceof ParameterizedType) {
+                System.out.println("Parameterized type for : " + type);
+
+                ParameterizedType parameterizedType = (ParameterizedType) type;
+                Type[] types = parameterizedType.getActualTypeArguments();
+
+                for(Type aType: types) {
+                    System.out.println(aType);
+                }
+                if(types[0].equals(Employee.class)) {
+                    ArrayList<?> l = new ArrayList<>();
+
+                    Set<Employee> employeesToAdd = new HashSet<>();
+                    List<LinkedHashMap<?, ?>> temp = new ArrayList<>();
+                    if(value instanceof List<?>) {
+                        for(Object object: (List<?>) value) {
+                            if(object instanceof Map<?, ?>) {
+                                Map<?, ?> map1 = (LinkedHashMap<?, ?>) object;
+                                temp.add((LinkedHashMap<?, ?>) object);
+                                for(Object o: map1.keySet()) {
+                                    // TODO: Try with reflection on Employee class
+                                    Employee employee = employeeRepository.findEmployeeById(Long.valueOf((Integer) map1.get("id")));
+                                    employeesToAdd.add(employee);
+                                }
+                            }
+                        }
+
+                    }
+
+                    //ArrayList<LinkedHashMap<String, Object>> alist = (ArrayList<LinkedHashMap<String, Object>>) value;
+                    //Set<Employee> employeesToAdd = new HashSet<>(); // B
+                    //System.out.println(Long.valueOf((Integer) alist.get(0).get("id")));
+//                    alist.forEach(aKey -> {
+//                        Employee employee = employeeRepository.findEmployeeById(Long.valueOf((Integer) aKey.get("id")));
+//                        Field aField = ReflectionUtils.findField(Employee.class, "id");
+//                        if(aField != null) {
+//                            aField.setAccessible(true);
+//                        }
+//                        //ReflectionUtils.setField(field, retrievedTask, employee);
+//                        employeesToAdd.add(employee);
+//                        //retrievedTask.addEmployee(employee);
+//                    });
+                    Set<Employee> toRemove = new HashSet<>(originalEmployees);
+                    toRemove.removeAll(employeesToAdd); // A-B
+                    for(Employee employee: toRemove) {
+                        retrievedTask.removeEmployee(employee);
+                    }
+
+                    Set<Employee> toAdd = new HashSet<>(employeesToAdd);
+                    toAdd.removeAll(originalEmployees); // B-A
+                    for(Employee employee: toAdd) {
+                        retrievedTask.addEmployee(employee);
+                    }
+                }
+
+
+
+
+            }
+
+            /*for(Employee employee: new ArrayList<>(originalEmployees)) {
+                retrievedTask.removeEmployee(employee);
+            }*/
+
+            //ReflectionUtils.setField(field, retrievedTask, employeesToAdd);
+
+            //GenericResponse response = setEmployeePropertiesOfTask(retrievedTask);
+            /*if(response.getError() != null) {
+                return response;
+            }*/
+        });
+
+        Task updatedTask =  taskRepository.save(retrievedTask);
+
+        return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(updatedTask));
     }
 }

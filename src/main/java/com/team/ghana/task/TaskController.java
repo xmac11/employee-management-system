@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 public class TaskController {
@@ -49,6 +50,15 @@ public class TaskController {
     @PutMapping("/tasks/{taskId}")
     public ResponseEntity putTask(@Valid @RequestBody Task task, @PathVariable Long taskId) {
         GenericResponse response = taskService.putTask(task, taskId);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+
+    @PatchMapping("/tasks/{taskId}")
+    public ResponseEntity patchTask(@RequestBody Map<String, Object> map, @PathVariable Long taskId) {
+        GenericResponse response = taskService.patchTask(map, taskId);
 
         return response.getData() != null ?
                 new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
