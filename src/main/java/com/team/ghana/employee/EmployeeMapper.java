@@ -17,7 +17,7 @@ public class EmployeeMapper {
                 employee.getStatus().toString(),
                 employee.getContractType().toString(),
                 employee.getCompanyName(),
-                employee.getUnit().getName(),
+                mapUnitName(employee),
                 employee.getPosition());
     }
 
@@ -28,7 +28,7 @@ public class EmployeeMapper {
                 .collect(Collectors.toList());
     }
 
-    public String mapEmployeeWorkingPeriod(Employee employee) {
+     String mapEmployeeWorkingPeriod(Employee employee) {
 
         String hireDate = employee.getHireDate() == null ?
                 "[Missing Hire Date]" :
@@ -42,7 +42,7 @@ public class EmployeeMapper {
 
         return hireDate + " ---> " + dismissalDate;
     }
-    public String mapEmployeeFullName(Employee employee) {
+     String mapEmployeeFullName(Employee employee) {
 
         String firstName = employee.getFirstName() == null || "".equals(employee.getFirstName()) ?
                 "[Missing First Name]" :
@@ -53,6 +53,10 @@ public class EmployeeMapper {
 
 
         return firstName + " " + lastName;
+    }
+
+    String mapUnitName(Employee employee) {
+        return employee.getUnit().getName();
     }
 }
 
