@@ -36,4 +36,22 @@ public class TaskController {
         return response.getData() != null ? new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
                                             new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/tasksBy/{criteria}/{value}")
+    public ResponseEntity getTasksBy(@PathVariable String criteria, @PathVariable String value) {
+        GenericResponse response =  taskService.getTasksBy(criteria, value);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/tasksByNumberOfEmployeesAndDifficulty/{numberOfEmployees}/{difficulty}")
+    public ResponseEntity getTasksByNumberOfEmployeesAndDifficulty(@PathVariable String numberOfEmployees, @PathVariable String difficulty) {
+        GenericResponse response = taskService.getTasksWithBothCriteria(numberOfEmployees, difficulty);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
+    }
 }

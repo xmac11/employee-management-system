@@ -16,6 +16,9 @@ public class TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private SearchTaskStrategyFactory factory;
+
     public GenericResponse getTasks() {
         List<Task> tasks = taskRepository.findAll();
 
@@ -40,5 +43,22 @@ public class TaskService {
         }
 
         return new GenericResponse<>(taskMapper.mapTaskToTaskFullResponse(task));
+    }
+    public GenericResponse  getTasksBy(String criteria, String value) {
+        SearchTaskStrategy searchTaskStrategy = factory.makeStrategyForCriteria(criteria);
+        List<Task> tasksFiltered = searchTaskStrategy.execute(taskRepository.findAll(), value);
+
+        return new GenericResponse<>(taskMapper.mapTaskListToTaskResponseList(tasksFiltered));
+    }
+
+    public GenericResponse getTasksWithBothCriteria(String numberOfEmployees, String difficulty) {
+
+        SearchTaskStrategy numberOfEmployeesStrategy = factory.makeStrategyForCriteria("numberOfEmployees");
+        SearchTaskStrategy difficultyStrategy = factory.makeStrategyForCriteria("difficulty");
+
+        List<Task> tasksWithBothCriteria =
+                numberOfEmployeesStrategy.execute(difficultyStrategy.execute(taskRepository.findAll(), difficulty), numberOfEmployees);
+
+        return new GenericResponse<>(taskMapper.mapTaskListToTaskResponseList(tasksWithBothCriteria));
     }
 }

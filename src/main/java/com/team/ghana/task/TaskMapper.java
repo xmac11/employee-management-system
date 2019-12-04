@@ -18,7 +18,7 @@ public class TaskMapper {
         return new TaskResponse(task.getId(), task.getTitle(), task.getDescription(), findDifficulty(task), task.getStatus().toString());
     }
 
-    private String findDifficulty(Task task) {
+    static  String findDifficulty(Task task) {
         int sum = task.getEstimationA() + task.getEstimationB() + task.getEstimationC();
         double average = sum / 3.0;
 
