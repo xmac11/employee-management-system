@@ -2,6 +2,7 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.enums.TaskStatus;
+import com.team.ghana.errorHandling.EmployeeInDifferentUnitException;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
@@ -117,8 +118,7 @@ public class Task {
         this.employees = employees;
     }
 
-    //
-    public void addEmployee(Employee employee) {
+    private void addEmployee(Employee employee) {
         this.employees.add(employee);
         employee.getTasks().add(this);
     }
@@ -129,7 +129,9 @@ public class Task {
 
         if(employeeList.size() == 0 || this.checkIfSameUnit(employeeList.get(0).getUnit(), employee.getUnit())) {
             this.addEmployee(employee);
+            return;
         }
+        throw new EmployeeInDifferentUnitException(employee.getId());
     }
 
     private boolean checkIfSameUnit(Unit unit, Unit otherUnit) {

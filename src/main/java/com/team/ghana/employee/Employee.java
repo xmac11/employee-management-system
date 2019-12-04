@@ -2,6 +2,7 @@ package com.team.ghana.employee;
 
 import com.team.ghana.enums.ContractType;
 import com.team.ghana.enums.Status;
+import com.team.ghana.errorHandling.EmployeeInDifferentUnitException;
 import com.team.ghana.task.Task;
 import com.team.ghana.unit.Unit;
 
@@ -155,7 +156,9 @@ public class Employee {
 
         if(employees.size() == 0 || this.checkIfSameUnit(employees.get(0).getUnit())) {
             this.addTask(task);
+            return;
         }
+        throw new EmployeeInDifferentUnitException(id);
     }
 
     private boolean checkIfSameUnit(Unit otherUnit) {

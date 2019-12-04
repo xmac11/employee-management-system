@@ -64,7 +64,7 @@ public class TaskService {
         }
 
         for(Employee employee: task.getEmployees()) {
-            task.addEmployee(employee);
+            task.addEmployeeIfSameUnit(employee);
         }
 
         Task addedTask = taskRepository.save(task);
@@ -104,7 +104,7 @@ public class TaskService {
         }
 
         for(Employee employee: task.getEmployees()) {
-            task.addEmployee(employee);
+            task.addEmployeeIfSameUnit(employee);
         }
 
         task.setId(taskId);
@@ -187,7 +187,7 @@ public class TaskService {
         Set<Employee> employeesToAdd = new HashSet<>(newEmployees);
         employeesToAdd.removeAll(originalEmployees); // B-A = newEmployees - originalEmployees
         for(Employee employee: employeesToAdd) {
-            retrievedTask.addEmployee(employee);
+            retrievedTask.addEmployeeIfSameUnit(employee);
         }
     }
 
