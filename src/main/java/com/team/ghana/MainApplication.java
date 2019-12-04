@@ -100,9 +100,9 @@ public class MainApplication implements CommandLineRunner {
 
 													/* Tasks */
 		Task task1 = new Task("Testing", "Test all methods", 2, 3, 2, NEW);
-		task1.addUpdate("Did requirements analysis");
-		task1.addUpdate("Created UML diagrams");
-		task1.addUpdate("Started programming");
+		task1.addUpdate("Tested mappers");
+		task1.addUpdate("Tested controllers");
+		task1.addUpdate("Acceptance testing");
 		task1.addEmployeeIfSameUnit(harris);
 		task1.addEmployeeIfSameUnit(aris);
 		//task1.addEmployeeIfSameUnit(kostas); // different unit, this should not be added
@@ -112,6 +112,13 @@ public class MainApplication implements CommandLineRunner {
 		task2.addEmployeeIfSameUnit(kostas);
 		//task2.addEmployeeIfSameUnit(iosif); // different unit, this should not be added
 		//dimitris.addTaskIfSameUnit(task2); // different unit, this should not be added
+
+		Task task3 = new Task("Analysis", "Create project specifications", 2, 4, 10, NEW);
+		task1.addUpdate("Did requirements analysis");
+		task1.addUpdate("Created UML diagrams");
+		task1.addUpdate("Started programming");
+		task3.addEmployeeIfSameUnit(maria);
+		task3.addEmployeeIfSameUnit(katerina);
 
 		// save Company
 		companyRepository.save(company);
@@ -139,6 +146,7 @@ public class MainApplication implements CommandLineRunner {
 		// save Tasks
 		taskRepository.save(task1);
 		taskRepository.save(task2);
+		taskRepository.save(task3);
 
 		// save Employees
 		employeeRepository.save(harris);

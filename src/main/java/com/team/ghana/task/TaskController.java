@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -64,4 +65,37 @@ public class TaskController {
                 new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
                 new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
+
+    @DeleteMapping("/tasks/{taskId}")
+    public ResponseEntity deleteTask(@PathVariable Long taskId) {
+        GenericResponse response = taskService.deleteTask(taskId);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/tasks")
+    public ResponseEntity deleteAllTasks() {
+        GenericResponse response = taskService.deleteAllTasks();
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Deletes all tasks with the user-provided IDs.
+     * @param idList a list of IDs of the tasks to be deleted.
+     */
+    @DeleteMapping("/tasks/batch")
+    public ResponseEntity deleteBatchOfTasks(@Valid @RequestBody List<Long> idList) {
+        GenericResponse response = taskService.deleteBatchOfTasks(idList);
+
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK):
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+
+
 }

@@ -204,4 +204,49 @@ public class TaskService {
                 && ((ParameterizedType) type).getActualTypeArguments().length == 1
                 && ((ParameterizedType) type).getActualTypeArguments()[0].equals(Employee.class);
     }
+
+    public GenericResponse deleteTask(Long taskId) {
+        if(!taskRepository.findById(taskId).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskId + " does not exist"));
+        }
+        Task retrievedTask =  taskRepository.findTaskById(taskId);
+        retrievedTask.removeAllEmployees();
+
+        taskRepository.deleteById(taskId);
+
+        if(taskRepository.findById(taskId).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + taskId + " was not deleted"));
+        }
+        return new GenericResponse<>("Task with Id " + taskId + " was deleted");
+    }
+
+    public GenericResponse deleteAllTasks() {
+        List<Task> retrievedTasks = taskRepository.findAll();
+        retrievedTasks.forEach(Task::removeAllEmployees);
+        taskRepository.deleteAll();
+
+        return taskRepository.count() == 0 ?
+                new GenericResponse<>("All tasks were deleted") :
+                new GenericResponse<>(new CustomError(0, "Error", "Tasks were not deleted"));
+
+    }
+
+    public GenericResponse deleteBatchOfTasks(List<Long> idList) {
+        long totalNumberOfTasks = taskRepository.count();
+        long numberOfTasksToDelete = idList.size();
+
+        for(Long id: idList) {
+            Task task = taskRepository.findTaskById(id);
+            if(task == null) {
+                return new GenericResponse<>(new CustomError(0, "Error", "Task with ID: " + id + " does not exist"));
+            }
+
+            task.removeAllEmployees();
+            taskRepository.deleteById(task.getId());
+        }
+
+        return totalNumberOfTasks - numberOfTasksToDelete == taskRepository.count() ?
+                new GenericResponse<>("Tasks were deleted") :
+                new GenericResponse<>(new CustomError(0, "Error", "Tasks were not deleted"));
+    }
 }
