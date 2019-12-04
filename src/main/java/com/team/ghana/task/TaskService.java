@@ -2,6 +2,7 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
+import com.team.ghana.enums.TaskStatus;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
@@ -118,9 +119,8 @@ public class TaskService {
         }
 
         Task retrievedTask = taskRepository.findTaskById(taskId);
-        Set<Employee> originalEmployees = retrievedTask.getEmployees(); // A
 
-        map.forEach((property, value) -> {
+        map.forEach( (property, value) -> {
             Field field = ReflectionUtils.findField(Task.class, property);
             if(field == null) {
                 throw new FieldNotFoundException(property + " is not a valid field");
@@ -128,80 +128,80 @@ public class TaskService {
             field.setAccessible(true);
 
             Type type = field.getGenericType();
-            if(type instanceof ParameterizedType) {
-                System.out.println("Parameterized type for : " + type);
-
-                ParameterizedType parameterizedType = (ParameterizedType) type;
-                Type[] types = parameterizedType.getActualTypeArguments();
-
-                for(Type aType: types) {
-                    System.out.println(aType);
-                }
-                if(types[0].equals(Employee.class)) {
-                    ArrayList<?> l = new ArrayList<>();
-
-                    Set<Employee> employeesToAdd = new HashSet<>();
-                    List<LinkedHashMap<?, ?>> temp = new ArrayList<>();
-                    if(value instanceof List<?>) {
-                        for(Object object: (List<?>) value) {
-                            if(object instanceof Map<?, ?>) {
-                                Map<?, ?> map1 = (LinkedHashMap<?, ?>) object;
-                                temp.add((LinkedHashMap<?, ?>) object);
-                                for(Object o: map1.keySet()) {
-                                    // TODO: Try with reflection on Employee class
-                                    Employee employee = employeeRepository.findEmployeeById(Long.valueOf((Integer) map1.get("id")));
-                                    employeesToAdd.add(employee);
-                                }
-                            }
-                        }
-
-                    }
-
-                    //ArrayList<LinkedHashMap<String, Object>> alist = (ArrayList<LinkedHashMap<String, Object>>) value;
-                    //Set<Employee> employeesToAdd = new HashSet<>(); // B
-                    //System.out.println(Long.valueOf((Integer) alist.get(0).get("id")));
-//                    alist.forEach(aKey -> {
-//                        Employee employee = employeeRepository.findEmployeeById(Long.valueOf((Integer) aKey.get("id")));
-//                        Field aField = ReflectionUtils.findField(Employee.class, "id");
-//                        if(aField != null) {
-//                            aField.setAccessible(true);
-//                        }
-//                        //ReflectionUtils.setField(field, retrievedTask, employee);
-//                        employeesToAdd.add(employee);
-//                        //retrievedTask.addEmployee(employee);
-//                    });
-                    Set<Employee> toRemove = new HashSet<>(originalEmployees);
-                    toRemove.removeAll(employeesToAdd); // A-B
-                    for(Employee employee: toRemove) {
-                        retrievedTask.removeEmployee(employee);
-                    }
-
-                    Set<Employee> toAdd = new HashSet<>(employeesToAdd);
-                    toAdd.removeAll(originalEmployees); // B-A
-                    for(Employee employee: toAdd) {
-                        retrievedTask.addEmployee(employee);
-                    }
-                }
-
-
-
-
+            if(this.isOfTypeEmployee(type)) {
+                this.handleEmployeePatch(retrievedTask, value, type);
             }
-
-            /*for(Employee employee: new ArrayList<>(originalEmployees)) {
-                retrievedTask.removeEmployee(employee);
-            }*/
-
-            //ReflectionUtils.setField(field, retrievedTask, employeesToAdd);
-
-            //GenericResponse response = setEmployeePropertiesOfTask(retrievedTask);
-            /*if(response.getError() != null) {
-                return response;
-            }*/
+            // https://stackoverflow.com/questions/8974350/how-to-check-if-java-lang-reflect-type-is-an-enum
+            else if(type instanceof Class<?> && ((Class<?>) type).isEnum()) {
+                // https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection
+                ReflectionUtils.setField(field, retrievedTask, Enum.valueOf( (Class<Enum>) type, String.valueOf(value).toUpperCase()));
+            }
+            else {
+                ReflectionUtils.setField(field, retrievedTask, value);
+            }
         });
-
-        Task updatedTask =  taskRepository.save(retrievedTask);
+        Task updatedTask = taskRepository.save(retrievedTask);
 
         return new GenericResponse<>(taskMapper.mapTaskToDebugResponse(updatedTask));
+    }
+
+    private void handleEmployeePatch(Task retrievedTask, Object value, Type type) {
+        // https://stackoverflow.com/questions/18159747/how-to-cast-a-field-as-a-set-class-in-java
+        System.out.println("Parameterized type for : " + type);
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type[] types = parameterizedType.getActualTypeArguments();
+        for(Type aType: types) {
+            System.out.println(aType);
+        }
+
+        Set<Employee> originalEmployees = retrievedTask.getEmployees(); // A
+        Set<Employee> newEmployees = new HashSet<>(); // B
+
+        this.populateNewEmployees(value, newEmployees);
+
+        this.removeOldEmployees(retrievedTask, newEmployees, originalEmployees);
+
+        this.addNewEmployees(retrievedTask, newEmployees, originalEmployees);
+    }
+
+    // https://stackoverflow.com/questions/25003711/check-if-an-object-is-instance-of-list-of-given-class-name
+    private void populateNewEmployees(Object value, Set<Employee> newEmployees) {
+        if(value instanceof List<?>) {
+            for(Object object: (List<?>) value) {
+                if(object instanceof Map<?, ?>) {
+                    Map<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) object;
+                    for(Object obj: linkedHashMap.keySet()) {
+                        if(!String.valueOf(obj).equalsIgnoreCase("id")) {
+                            throw new FieldNotFoundException("Please patch employees by their Id");
+                        }
+                        // https://www.mkyong.com/java/java-convert-integer-to-long/ (otherwise java.lang.Integer cannot be cast to java.lang.Long)
+                        Employee employee = employeeRepository.findEmployeeById(Long.valueOf((Integer) linkedHashMap.get("id")));
+                        newEmployees.add(employee);
+                    }
+                }
+            }
+        }
+    }
+
+    private void addNewEmployees(Task retrievedTask, Set<Employee> newEmployees, Set<Employee> originalEmployees) {
+        Set<Employee> employeesToAdd = new HashSet<>(newEmployees);
+        employeesToAdd.removeAll(originalEmployees); // B-A = newEmployees - originalEmployees
+        for(Employee employee: employeesToAdd) {
+            retrievedTask.addEmployee(employee);
+        }
+    }
+
+    private void removeOldEmployees(Task retrievedTask, Set<Employee> newEmployees, Set<Employee> originalEmployees) {
+        Set<Employee> toRemove = new HashSet<>(originalEmployees);
+        toRemove.removeAll(newEmployees); // A-B = originalEmployees - newEmployees
+        for(Employee employee: toRemove) {
+            retrievedTask.removeEmployee(employee);
+        }
+    }
+
+    private boolean isOfTypeEmployee(Type type) {
+        return type instanceof ParameterizedType
+                && ((ParameterizedType) type).getActualTypeArguments().length == 1
+                && ((ParameterizedType) type).getActualTypeArguments()[0].equals(Employee.class);
     }
 }
