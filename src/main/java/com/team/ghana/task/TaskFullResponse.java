@@ -16,6 +16,12 @@ public class TaskFullResponse extends TaskResponse {
         this.updates = updates;
     }
 
+    public TaskFullResponse(TaskResponse taskResponse, List<EmployeeResponse> assignedEmployees, List<String> updates) {
+        super(taskResponse.getId(), taskResponse.getTitle(), taskResponse.getDescription(), taskResponse.getDifficulty(), taskResponse.getStatus());
+        this.assignedEmployees = assignedEmployees;
+        this.updates = updates;
+    }
+
     public List<EmployeeResponse> getAssignedEmployees() {
         return assignedEmployees;
     }

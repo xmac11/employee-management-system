@@ -3,6 +3,7 @@ package com.team.ghana.task;
 import com.team.ghana.employee.EmployeeResponse;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used as the response printed when performing a POST request of a task,
@@ -30,6 +31,18 @@ public class TaskDebugResponse {
         this.estimationC = estimationC;
         this.status = status;
         this.updates = updates;
+        this.employees = employees;
+    }
+
+    public TaskDebugResponse(Task task, List<EmployeeResponse> employees) {
+        this.id = task.getId();
+        this.title = task.getTitle();
+        this.description = task.getDescription();
+        this.estimationA = task.getEstimationA();
+        this.estimationB = task.getEstimationB();
+        this.estimationC = task.getEstimationC();
+        this.status = String.valueOf(task.getStatus());
+        this.updates = task.getUpdates();
         this.employees = employees;
     }
 
@@ -103,5 +116,26 @@ public class TaskDebugResponse {
 
     public void setEmployees(List<EmployeeResponse> employees) {
         this.employees = employees;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        TaskDebugResponse that = (TaskDebugResponse) o;
+        return estimationA == that.estimationA &&
+                estimationB == that.estimationB &&
+                estimationC == that.estimationC &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, estimationA, estimationB, estimationC, status);
     }
 }

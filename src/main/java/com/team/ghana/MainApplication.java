@@ -114,9 +114,9 @@ public class MainApplication implements CommandLineRunner {
 		//dimitris.addTaskIfSameUnit(task2); // different unit, this should not be added
 
 		Task task3 = new Task("Analysis", "Create project specifications", 2, 4, 10, NEW);
-		task1.addUpdate("Did requirements analysis");
-		task1.addUpdate("Created UML diagrams");
-		task1.addUpdate("Started programming");
+		task3.addUpdate("Did requirements analysis");
+		task3.addUpdate("Created UML diagrams");
+		task3.addUpdate("Started programming");
 		task3.addEmployeeIfSameUnit(maria);
 		task3.addEmployeeIfSameUnit(katerina);
 

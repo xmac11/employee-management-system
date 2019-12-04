@@ -53,14 +53,7 @@ public class TaskMapper {
     // helper for checking POST requests of tasks
     public TaskDebugResponse mapTaskToDebugResponse(Task task) {
         return new TaskDebugResponse(
-               task.getId(),
-               task.getTitle(),
-               task.getDescription(),
-               task.getEstimationA(),
-               task.getEstimationB(),
-               task.getEstimationC(),
-               task.getStatus().toString(),
-               task.getUpdates(),
-               employeeMapper.mapEmployeeListToEmployeeResponseList(task.getEmployees()));
+               task,
+               employeeMapper.mapEmployeeListToEmployeeResponseList(task.getEmployees()) );
     }
 }

@@ -26,6 +26,26 @@ public class EmployeeResponse {
         this.position = position;
     }
 
+    public EmployeeResponse(Employee employee) {
+        this.id = employee.getId();
+        this.fullName = getFullName(employee);
+        this.homeAddress = employee.getHomeAddress();
+        this.phoneNumber = employee.getPhoneNumber();
+        this.workingPeriod = getWorkingPeriod(employee);
+        this.status = String.valueOf(employee.getStatus());
+        this.contractType = String.valueOf(employee.getContractType());
+        this.unitName = employee.getUnit().getName();
+        this.position = employee.getPosition();
+    }
+
+    private String getFullName(Employee employee) {
+        return employee.getFirstName() + " " + employee.getLastName();
+    }
+
+    private String getWorkingPeriod(Employee employee) {
+        return employee.getHireDate() + " - " + (employee.getRedundancyDate() == null ? "present" : employee.getRedundancyDate());
+    }
+
     public Long getId() {
         return id;
     }
