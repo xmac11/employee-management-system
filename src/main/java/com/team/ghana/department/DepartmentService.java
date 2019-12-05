@@ -24,7 +24,7 @@ public class DepartmentService {
     @Autowired
     private BusinessUnitRepository businessUnitRepository;
 
-    public GenericResponse getDepartments() {
+    public GenericResponse<List<DepartmentResponse>> getDepartments() {
         List<Department> retrievedDepartments = departmentRepository.findAll();
 
         List<DepartmentResponse> departmentResponses = departmentMapper.mapDepartmentListToDepartmentResponseList(retrievedDepartments);
@@ -33,7 +33,7 @@ public class DepartmentService {
     }
 
     public GenericResponse<DepartmentResponse> getDepartmentByID(Long departmentID) {
-        Department department = departmentRepository.findById(departmentID).orElse(null);
+        Department department = departmentRepository.findDepartmentById(departmentID);
 
         if(department == null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department with ID: " + departmentID + " does not exist"));

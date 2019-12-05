@@ -1,4 +1,4 @@
-package com.team.ghana;
+package com.team.ghana.employee;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeMapper;
