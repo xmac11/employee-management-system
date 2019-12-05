@@ -5,6 +5,9 @@ import com.team.ghana.enums.Status;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -13,13 +16,19 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String lastName, firstName;
+    @NotBlank(message = "Last name must not be blank")
+    private String lastName;
+    @NotBlank(message = "First name must not be blank")
+    private String firstName;
     private String homeAddress;
     private String phoneNumber;
-    private LocalDate hireDate, redundancyDate;
+    @NotNull(message = "Hiring date must not be blank")
+    private LocalDate hireDate;
+    private LocalDate redundancyDate;
+    @NotNull(message = "Status must not be null")
     private Status status;
     private ContractType contractType;
-    private String companyName;
+    @NotNull(message = "Unit must not be null or field not valid")
     @ManyToOne
     private Unit unit;
     private String position;
@@ -27,7 +36,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String lastName, String firstName, String homeAddress, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, String companyName, Unit unit, String position) {
+    public Employee(String lastName, String firstName, String homeAddress, String phoneNumber, LocalDate hireDate, LocalDate redundancyDate, Status status, ContractType contractType, Unit unit, String position) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.homeAddress = homeAddress;
@@ -36,7 +45,6 @@ public class Employee {
         this.redundancyDate = redundancyDate;
         this.status = status;
         this.contractType = contractType;
-        this.companyName = companyName;
         this.unit = unit;
         this.position = position;
     }
@@ -113,14 +121,6 @@ public class Employee {
         this.contractType = contractType;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     public Unit getUnit() {
         return unit;
     }
@@ -135,5 +135,11 @@ public class Employee {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    @AssertTrue(message = "Redundancy date should be null or after the hiring date")
+    private boolean isAssertTrue() {
+        return this.redundancyDate == null ||
+                redundancyDate.isAfter(hireDate);
     }
 }

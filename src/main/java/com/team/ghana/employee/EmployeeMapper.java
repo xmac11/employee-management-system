@@ -9,15 +9,15 @@ import java.util.stream.Collectors;
 public class EmployeeMapper {
 
     public EmployeeResponse mapEmployeeToEmployeeResponse(Employee employee) {
+
         return new EmployeeResponse(employee.getId(),
-                mapEmployeeFullName(employee),
+                this.mapEmployeeFullName(employee),
                 employee.getHomeAddress(),
                 employee.getPhoneNumber(),
-                mapEmployeeWorkingPeriod(employee),
+                this.mapEmployeeWorkingPeriod(employee),
                 employee.getStatus().toString(),
                 employee.getContractType().toString(),
-                employee.getCompanyName(),
-                mapUnitName(employee),
+                employee.getUnit().getName(),
                 employee.getPosition());
     }
 
@@ -28,35 +28,13 @@ public class EmployeeMapper {
                 .collect(Collectors.toList());
     }
 
-     String mapEmployeeWorkingPeriod(Employee employee) {
-
-        String hireDate = employee.getHireDate() == null ?
-                "[Missing Hire Date]" :
-                employee.getHireDate().toString();
-
-        String dismissalDate = employee.getHireDate() == null ?
-                "Contact Administration" :
-                employee.getRedundancyDate() == null ?
-                        "Present" :
-                        employee.getRedundancyDate().toString();
-
-        return hireDate + " ---> " + dismissalDate;
-    }
-     String mapEmployeeFullName(Employee employee) {
-
-        String firstName = employee.getFirstName() == null || "".equals(employee.getFirstName()) ?
-                "[Missing First Name]" :
-                employee.getFirstName();
-        String lastName = employee.getLastName() == null || "".equals(employee.getLastName()) ?
-                "[Missing Last Name]" :
-                employee.getLastName();
-
-
-        return firstName + " " + lastName;
+    public String mapEmployeeFullName(Employee employee) {
+        return employee.getFirstName() + " " + employee.getLastName();
     }
 
-    String mapUnitName(Employee employee) {
-        return employee.getUnit().getName();
+    public String mapEmployeeWorkingPeriod(Employee employee) {
+        return employee.getHireDate() + " --> " +
+                (employee.getRedundancyDate() == null ? "present" : employee.getRedundancyDate());
     }
 }
 

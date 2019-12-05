@@ -1,7 +1,6 @@
 package com.team.ghana.employee;
 
 import com.team.ghana.errorHandling.GenericResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +37,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity addEmployee(@Valid @RequestBody Employee employee) {
-        GenericResponse response = employeeService.addEmployee(employee);
+    public ResponseEntity postEmployee(@Valid @RequestBody Employee employee) {
+        GenericResponse response = employeeService.postEmployee(employee);
 
         return (response.getData() != null) ?
                 new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :
@@ -47,7 +46,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees/{employeeId}")
-    public ResponseEntity updateEmployee(@Valid @RequestBody Employee employee,@PathVariable Long employeeId) {
+    public ResponseEntity putEmployee(@Valid @RequestBody Employee employee, @PathVariable Long employeeId) {
         GenericResponse response = employeeService.putEmployee(employee, employeeId);
 
         return (response.getData() != null) ?
