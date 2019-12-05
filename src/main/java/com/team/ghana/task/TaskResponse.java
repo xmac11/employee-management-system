@@ -1,5 +1,7 @@
 package com.team.ghana.task;
 
+import java.util.Objects;
+
 public class TaskResponse {
 
     private Long id;
@@ -54,5 +56,24 @@ public class TaskResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        TaskResponse that = (TaskResponse) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(difficulty, that.difficulty) &&
+                Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, difficulty, status);
     }
 }

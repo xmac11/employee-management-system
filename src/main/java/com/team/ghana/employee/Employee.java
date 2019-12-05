@@ -2,6 +2,7 @@ package com.team.ghana.employee;
 
 import com.team.ghana.enums.ContractType;
 import com.team.ghana.enums.Status;
+import com.team.ghana.errorHandling.EmployeeInDifferentUnitException;
 import com.team.ghana.task.Task;
 import com.team.ghana.unit.Unit;
 
@@ -9,10 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Employee {
@@ -158,19 +156,43 @@ public class Employee {
 
         if(employees.size() == 0 || this.checkIfSameUnit(employees.get(0).getUnit())) {
             this.addTask(task);
+            return;
         }
+        throw new EmployeeInDifferentUnitException(id);
     }
 
     private boolean checkIfSameUnit(Unit otherUnit) {
         return this.unit.equals(otherUnit);
     }
 
+    public void removeTask(Task task) {
+        this.tasks.remove(task);
+        task.getEmployees().remove(this);
+    }
+
     @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(homeAddress, employee.homeAddress) &&
+                Objects.equals(phoneNumber, employee.phoneNumber) &&
+                Objects.equals(hireDate, employee.hireDate) &&
+                Objects.equals(redundancyDate, employee.redundancyDate) &&
+                status == employee.status &&
+                contractType == employee.contractType &&
+                Objects.equals(unit, employee.unit) &&
+                Objects.equals(position, employee.position) &&
+                Objects.equals(tasks, employee.tasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, homeAddress, phoneNumber, hireDate, redundancyDate, status, contractType, unit, position, tasks);
     }
 }

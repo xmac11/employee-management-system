@@ -2,13 +2,14 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.enums.TaskStatus;
+import com.team.ghana.errorHandling.EmployeeInDifferentUnitException;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.util.*;
 
 @Entity
 public class Task {
@@ -16,15 +17,20 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Title must not be blank")
     private String title;
+    @NotBlank(message = "Description must no be blank")
     private String description;
+    @Positive(message = "EstimationA must be positive")
     private int estimationA;
+    @Positive(message = "EstimationB must be positive")
     private int estimationB;
+    @Positive(message = "EstimationC must be positive")
     private int estimationC;
+    @NotNull(message = "Status must not be null")
     private TaskStatus status;
-    @Transient
-    private List<String> updatesList = new ArrayList<>();
-    private String updates;
+    @ElementCollection
+    private List<String> updates = new ArrayList<>();
     @ManyToMany(mappedBy = "tasks")
     private Set<Employee> employees = new HashSet<>();
 
@@ -96,19 +102,11 @@ public class Task {
         this.status = status;
     }
 
-    public List<String> getUpdatesList() {
-        return updatesList;
-    }
-
-    public void setUpdatesList(List<String> updatesList) {
-        this.updatesList = updatesList;
-    }
-
-    public String getUpdates() {
+    public List<String> getUpdates() {
         return updates;
     }
 
-    public void setUpdates(String updates) {
+    public void setUpdates(List<String> updates) {
         this.updates = updates;
     }
 
@@ -131,7 +129,9 @@ public class Task {
 
         if(employeeList.size() == 0 || this.checkIfSameUnit(employeeList.get(0).getUnit(), employee.getUnit())) {
             this.addEmployee(employee);
+            return;
         }
+        throw new EmployeeInDifferentUnitException(employee.getId());
     }
 
     private boolean checkIfSameUnit(Unit unit, Unit otherUnit) {
@@ -139,7 +139,17 @@ public class Task {
     }
 
     public void addUpdate(String update) {
-        this.updatesList.add(update);
-        this.updates = updatesList.toString();
+        this.updates.add(update);
+    }
+
+    public void removeEmployee(Employee employee) {
+        this.employees.remove(employee);
+        employee.getTasks().remove(this);
+    }
+
+    public void removeAllEmployees() {
+        for(Employee employee: new ArrayList<>(employees)) {
+            this.removeEmployee(employee);
+        }
     }
 }
