@@ -1,5 +1,6 @@
 package com.team.ghana.department;
 
+import com.team.ghana.businessUnit.BusinessUnit;
 import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.FieldNotFoundException;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,11 +97,31 @@ public class DepartmentService {
             }
 
             field.setAccessible(true);
-            ReflectionUtils.setField(field, retrievedDepartment, value);
+
+            Type type = field.getGenericType();
+            if(type.equals(BusinessUnit.class)) {
+                this.handleBusinessUnitPatch(retrievedDepartment, value, type);
+            }
+            else {
+                ReflectionUtils.setField(field, retrievedDepartment, value);
+            }
         });
 
         Department updatedDepartment = departmentRepository.save(retrievedDepartment);
 
         return new GenericResponse<>(updatedDepartment);
+    }
+
+    private void handleBusinessUnitPatch(Department retrievedDepartment, Object value, Type type) {
+        if(value instanceof Map<?, ?>) {
+            Map<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) value;
+            for(Object obj : linkedHashMap.keySet()) {
+                if(!String.valueOf(obj).equalsIgnoreCase("id")) {
+                    throw new FieldNotFoundException("Please patch Business Units by their Id");
+                }
+                BusinessUnit businessUnit = businessUnitRepository.findBusinessUnitById(Long.valueOf((Integer) linkedHashMap.get("id")));
+                retrievedDepartment.setBusinessUnit(businessUnit);
+            }
+        }
     }
 }

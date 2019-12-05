@@ -7,7 +7,9 @@ import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.*;
 
 import java.util.*;
@@ -31,12 +33,15 @@ public class DepartmentServiceShould {
     @Mock
     private BusinessUnit mockedBusinessUnit;
 
+    private BusinessUnit horizontalBU;
+    private BusinessUnit verticalBU;
+
     private DepartmentResponse departmentResponse1;
     private DepartmentResponse departmentResponse2;
 
     private Department department;
     private Department departmentToPut;
-    private Department patchedDepartment;
+    private Department patchedDepartmentName;
 
     private List<Department> mockedDepartments = new ArrayList<Department>() {
         {
@@ -50,11 +55,14 @@ public class DepartmentServiceShould {
         MockitoAnnotations.initMocks(this);
         //when(departmentRepository.findAll()).thenReturn(mockedDepartments);
         Company company = new Company("UniSystems", "+30 211 999 7000", "19-23, Al.Pantou str.");
-        BusinessUnit horizontalBU = new BusinessUnit("Horizontal", 1, company);
+        this.horizontalBU = new BusinessUnit("Horizontal", 1, company);
         horizontalBU.setId(1L);
+        this.verticalBU = new BusinessUnit("Vertical", 2, company);
+        verticalBU.setId(2L);
+
         this.department = new Department("IT & Managed Services", horizontalBU);
         this.departmentToPut = new Department("Solutions & Pre-Sales", horizontalBU);
-        this.patchedDepartment = new Department("newName", horizontalBU);
+        this.patchedDepartmentName = new Department("newName", horizontalBU);
 
         this.departmentResponse1 = new DepartmentResponse(1L, "IT & Managed Services", "Horizontal");
         this.departmentResponse2 = new DepartmentResponse(2L, "Solutions & Pre-Sales", "Horizontal");
@@ -125,8 +133,6 @@ public class DepartmentServiceShould {
 
     @Test
     public void putDepartmentToRepository() {
-        department.setId(1L);
-
         when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
         when(businessUnitRepository.findById(anyLong())).thenReturn(Optional.of(mockedBusinessUnit));
         when(departmentRepository.save(any())).thenReturn(departmentToPut);
@@ -136,54 +142,63 @@ public class DepartmentServiceShould {
         Assert.assertNotNull(response.getData());
         Assert.assertNull(response.getError());
         Assert.assertEquals(departmentToPut, response.getData());
-
-        department.setId(null);
     }
 
     @Test
     public void notPutDepartmentIfIdNotPresent() {
-        department.setId(1L);
-
         GenericResponse response = departmentService.putDepartment(departmentToPut, 1L);
 
         Assert.assertNotNull(response.getError());
         Assert.assertNull(response.getData());
-
-        department.setId(null);
     }
 
     @Test
     public void notPutDepartmentIfBusinessUnitNotPresent() {
-        department.setId(1L);
-
         when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
 
         GenericResponse response = departmentService.putDepartment(departmentToPut, 1L);
 
         Assert.assertNotNull(response.getError());
         Assert.assertNull(response.getData());
-
-        department.setId(null);
     }
 
     /* PATCH */
 
     @Test
-    public void patchDepartment() {
-        department.setId(1L);
+    public void patchDepartmentName() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "newName");
 
-        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(patchedDepartment));
-        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedDepartment);
-        when(departmentRepository.save(any())).thenReturn(patchedDepartment);
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(patchedDepartmentName));
+        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedDepartmentName);
+        when(departmentRepository.save(any())).thenReturn(patchedDepartmentName);
+
         GenericResponse response = departmentService.patchDepartment(map, 1L);
 
         Assert.assertNotNull(response.getData());
         Assert.assertNull(response.getError());
-        Assert.assertEquals(patchedDepartment, response.getData());
+        Assert.assertEquals(patchedDepartmentName, response.getData());
+    }
 
-        department.setId(null);
+    @Test
+    public void patchNameAndBusinessUnitOfDepartment() {
+        Map<String, Integer> temp = new LinkedHashMap<>();
+        temp.put("id", 2);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "newName");
+        map.put("businessUnit", temp);
+
+        Department patchedBusinessUnitOfDepartment = new Department(department.getName(), verticalBU);
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(patchedBusinessUnitOfDepartment));
+        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedBusinessUnitOfDepartment);
+        when(departmentRepository.save(any())).thenReturn(patchedBusinessUnitOfDepartment);
+
+        GenericResponse response = departmentService.patchDepartment(map, 1L);
+
+        Assert.assertNotNull(response.getData());
+        Assert.assertNull(response.getError());
+        Assert.assertEquals(patchedBusinessUnitOfDepartment, response.getData());
     }
 
     @Test
@@ -201,8 +216,28 @@ public class DepartmentServiceShould {
         Map<String, Object> map = new HashMap<>();
         map.put("wrongField", "newName");
 
-        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(patchedDepartment));
-        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedDepartment);
-        GenericResponse response = departmentService.patchDepartment(map, 1L);
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(patchedDepartmentName));
+        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedDepartmentName);
+
+        departmentService.patchDepartment(map, 1L);
+    }
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @Test(expected = FieldNotFoundException.class)
+    public void throwExceptionForInvalidFieldInBusinessUnit() {
+        Map<String, Integer> temp = new LinkedHashMap<>();
+        temp.put("wrong", 2);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("businessUnit", temp);
+
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
+        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(any());
+
+        departmentService.patchDepartment(map, 1L);
+
+        exception.expectMessage("Please patch Business Units by their Id");
     }
 }
