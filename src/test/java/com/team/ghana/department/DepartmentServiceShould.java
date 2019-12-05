@@ -105,7 +105,7 @@ public class DepartmentServiceShould {
     @Test
     public void postDepartmentToRepository() {
         when(departmentRepository.save(any())).thenReturn(department);
-        when(businessUnitRepository.findById(anyLong())).thenReturn(Optional.of(mockedBusinessUnit));
+        when(businessUnitRepository.findBusinessUnitById(anyLong())).thenReturn(mockedBusinessUnit);
 
         GenericResponse response = departmentService.postDepartment(department);
         Assert.assertNotNull(response.getData());
