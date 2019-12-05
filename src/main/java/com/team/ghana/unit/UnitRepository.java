@@ -31,15 +31,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     @Override
     @RestResource(exported = false)
-    <S extends Unit> S save(S entity);
-
-    @Override
-    @RestResource(exported = false)
     void deleteById(Long aLong);
-
-    @Override
-    @RestResource(exported = false)
-    void delete(Unit entity);
 
     @Override
     @RestResource(exported = false)
@@ -50,4 +42,5 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     void deleteAll();
 
     Unit findUnitById(Long id);
+
 }

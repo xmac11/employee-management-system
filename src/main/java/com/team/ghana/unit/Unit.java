@@ -3,6 +3,8 @@ package com.team.ghana.unit;
 import com.team.ghana.department.Department;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Unit {
@@ -10,7 +12,9 @@ public class Unit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Unit name must not be blank or null")
     private String name;
+    @NotNull(message = "Department property must not be null")
     @ManyToOne
     private Department department;
 

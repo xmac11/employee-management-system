@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
+    Department findDepartmentById(Long Id);
+
     @Override
     @RestResource(exported = false)
     void deleteInBatch(Iterable<Department> entities);
