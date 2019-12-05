@@ -2,6 +2,7 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.EmployeeMapper;
 import com.team.ghana.employee.EmployeeResponse;
+import com.team.ghana.task.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,22 +22,7 @@ public class TaskMapper {
     }
 
     public TaskResponse mapTaskToTaskResponse(Task task) {
-        return new TaskResponse(task.getId(), task.getTitle(), task.getDescription(), findDifficulty(task), task.getStatus().toString());
-    }
-
-    private String findDifficulty(Task task) {
-        int sum = task.getEstimationA() + task.getEstimationB() + task.getEstimationC();
-        double average = sum / 3.0;
-
-        if(average < 2) {
-            return "EASY";
-        }
-        else if(average <= 4) {
-            return "MEDIUM";
-        }
-        else {
-            return "HARD";
-        }
+        return new TaskResponse(task.getId(), task.getTitle(), task.getDescription(), Utils.findDifficulty(task), task.getStatus().toString());
     }
 
     public TaskFullResponse mapTaskToTaskFullResponse(Task task) {
@@ -44,7 +30,7 @@ public class TaskMapper {
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
-                this.findDifficulty(task),
+                Utils.findDifficulty(task),
                 task.getStatus().toString(),
                 employeeMapper.mapEmployeeListToEmployeeResponseList(task.getEmployees()),
                 task.getUpdates());

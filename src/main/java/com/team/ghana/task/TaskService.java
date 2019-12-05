@@ -2,10 +2,11 @@ package com.team.ghana.task;
 
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
-import com.team.ghana.enums.TaskStatus;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
+import com.team.ghana.task.searchTaskStrategy.SearchTaskStrategy;
+import com.team.ghana.task.searchTaskStrategy.SearchTaskStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -26,6 +27,9 @@ public class TaskService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private SearchTaskStrategyFactory factory;
 
     public GenericResponse getTasks() {
         List<Task> tasks = taskRepository.findAll();
@@ -248,5 +252,23 @@ public class TaskService {
         return totalNumberOfTasks - numberOfTasksToDelete == taskRepository.count() ?
                 new GenericResponse<>("Tasks were deleted") :
                 new GenericResponse<>(new CustomError(0, "Error", "Tasks were not deleted"));
+    }
+
+    public GenericResponse getTasksBy(String criteria, String value) {
+        SearchTaskStrategy searchTaskStrategy = factory.makeStrategyForCriteria(criteria);
+        List<Task> tasksFiltered = searchTaskStrategy.execute(taskRepository.findAll(), value);
+
+        return new GenericResponse<>(taskMapper.mapTaskListToTaskResponseList(tasksFiltered));
+    }
+
+    public GenericResponse getTasksWithBothCriteria(String numberOfEmployees, String difficulty) {
+
+        SearchTaskStrategy numberOfEmployeesStrategy = factory.makeStrategyForCriteria("numberOfEmployees");
+        SearchTaskStrategy difficultyStrategy = factory.makeStrategyForCriteria("difficulty");
+
+        List<Task> tasksWithBothCriteria =
+                numberOfEmployeesStrategy.execute(difficultyStrategy.execute(taskRepository.findAll(), difficulty), numberOfEmployees);
+
+        return new GenericResponse<>(taskMapper.mapTaskListToTaskResponseList(tasksWithBothCriteria));
     }
 }
