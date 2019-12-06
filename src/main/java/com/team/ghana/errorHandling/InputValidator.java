@@ -7,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.persistence.RollbackException;
 import javax.validation.ConstraintViolation;
@@ -16,12 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /*
- * -- Validating the input of your REST API with Spring
- * https://dimitr.im/validating-the-input-of-your-rest-api-with-spring
- *
- * -- Difference between ConstraintViolationException and MethodArgumentNotValidException
- * https://stackoverflow.com/questions/57010688/what-is-the-difference-between-constraintviolationexception-and-methodargumentno
- * */
+* -- Validating the input of your REST API with Spring
+* https://dimitr.im/validating-the-input-of-your-rest-api-with-spring
+*
+* -- Difference between ConstraintViolationException and MethodArgumentNotValidException
+* https://stackoverflow.com/questions/57010688/what-is-the-difference-between-constraintviolationexception-and-methodargumentno
+* */
 
 /**
  * Class to catch certain types of exceptions in order to display the appropriate error message.
@@ -44,13 +43,13 @@ public class InputValidator {
     }
 
     /*
-     * https://stackoverflow.com/questions/53141761/how-catch-hibernate-jpa-constraint-violations-in-spring-boot
-     * https://stackoverflow.com/questions/45070642/springboot-doesnt-handle-javax-validation-constraintviolationexception
-     *
-     * -- You cannot catch ConstraintViolationException.class because it is not propagated to that layer of your code,
-     * it's caught by the lower layers, wrapped and rethrown under another type. So that the exception that hits your
-     * web layer is not a ConstraintViolationException.In this case, it is a TransactionSystemException.
-     * */
+    * https://stackoverflow.com/questions/53141761/how-catch-hibernate-jpa-constraint-violations-in-spring-boot
+    * https://stackoverflow.com/questions/45070642/springboot-doesnt-handle-javax-validation-constraintviolationexception
+    *
+    * -- You cannot catch ConstraintViolationException.class because it is not propagated to that layer of your code,
+    * it's caught by the lower layers, wrapped and rethrown under another type. So that the exception that hits your
+    * web layer is not a ConstraintViolationException.In this case, it is a TransactionSystemException.
+    * */
 
     /**
      * Method which catches exception thrown when a general transaction system error is encountered.
