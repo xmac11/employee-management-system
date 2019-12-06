@@ -1,10 +1,14 @@
 package com.team.ghana.employee;
 
+import com.team.ghana.enums.EmploySearchCriteria;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
 import com.team.ghana.unit.Unit;
 import com.team.ghana.unit.UnitRepository;
+import com.team.ghana.searchEmployeeStrategy.SearchEmployeeStrategy;
+import com.team.ghana.searchEmployeeStrategy.SearchEmployeeStrategyFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -12,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,15 +25,14 @@ import java.util.Map;
 @Service
 public class EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
-    private final UnitRepository unitRepository;
-
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UnitRepository unitRepository) {
-        this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
-        this.unitRepository = unitRepository;
-    }
+    @Autowired
+    private EmployeeRepository employeeRepository;
+    @Autowired
+    private EmployeeMapper employeeMapper;
+    @Autowired
+    private SearchEmployeeStrategyFactory strategyFactory;
+    @Autowired
+    private UnitRepository unitRepository;
 
     public GenericResponse getAllEmployees() {
         List<Employee> employeeList = employeeRepository.findAll();
@@ -134,10 +138,35 @@ public class EmployeeService {
         }
     }
 
-
     public void deleteEmployeeById(Long employeeId) {
         employeeRepository.deleteById(employeeId);
     }
 
+    // employee strategy pattern
+    public GenericResponse getEmployeesBySearchCriteria(String searchCriteria, Long id) {
+        if(!this.enumContains(searchCriteria)) {
+            return new GenericResponse(new CustomError(0, "Error", searchCriteria + " is not valid. Use " + Arrays.toString(EmploySearchCriteria.values()).toLowerCase()));
+        }
 
+        SearchEmployeeStrategy strategy = strategyFactory.makeStrategy(searchCriteria);
+
+        if(!strategy.idExists(id)) {
+            return new GenericResponse(new CustomError(0, "Error", searchCriteria + " with Id " + id + " does not exist."));
+        }
+
+        List<Employee> allEmployees = employeeRepository.findAll();
+        List<Employee> employees = strategy.execute(allEmployees, id);
+        List<EmployeeResponse> employeeResponses = employeeMapper.mapEmployeeListToEmployeeResponseList(employees);
+
+        return new GenericResponse<>(employeeResponses);
+    }
+
+    private boolean enumContains(String searchCriteria) {
+        for(EmploySearchCriteria endpoint: EmploySearchCriteria.values()){
+            if(String.valueOf(endpoint).equalsIgnoreCase(searchCriteria))
+                return true;
+        }
+
+        return false;
+    }
 }

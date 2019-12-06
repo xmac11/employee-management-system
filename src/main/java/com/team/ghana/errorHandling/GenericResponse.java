@@ -1,5 +1,8 @@
 package com.team.ghana.errorHandling;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class GenericResponse<T> {
 
     private T data;

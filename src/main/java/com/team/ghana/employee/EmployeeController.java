@@ -1,6 +1,7 @@
 package com.team.ghana.employee;
 
 import com.team.ghana.errorHandling.GenericResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,8 @@ import java.util.Map;
 @RestController
 public class EmployeeController {
 
-    final
-    EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -22,9 +23,7 @@ public class EmployeeController {
     public ResponseEntity getAllEmployees() {
         GenericResponse response = employeeService.getAllEmployees();
 
-        return new ResponseEntity<>(response.getData(),
-                null,
-                HttpStatus.OK);
+        return new ResponseEntity<>(response.getData(),null, HttpStatus.OK);
     }
 
     @GetMapping("/employees/{employeeId}")
@@ -66,6 +65,15 @@ public class EmployeeController {
     @DeleteMapping("/employees/{employeeId}")
     public void deleteEmployee(@PathVariable Long employeeId) {
         employeeService.deleteEmployeeById(employeeId);
+    }
+
+    @GetMapping("/employees/{searchCriteria}/{id}")
+    public ResponseEntity getEmployeesBySearchCriteria(@PathVariable String searchCriteria, @PathVariable Long id) {
+        GenericResponse response = employeeService.getEmployeesBySearchCriteria(searchCriteria, id);
+
+        return (response.getError() == null) ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
 }
 
