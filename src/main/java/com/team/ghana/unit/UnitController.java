@@ -22,7 +22,7 @@ public class UnitController {
 
         GenericResponse response = service.getAllUnits();
 
-        return new ResponseEntity<>(response, null, HttpStatus.OK);
+        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
     }
 
     @GetMapping("/units/{unitId}")
@@ -30,53 +30,35 @@ public class UnitController {
 
         GenericResponse response = service.getUnitById(unitId);
 
-        return new ResponseEntity<>(response, null, (response.getData() != null) ?
-                HttpStatus.OK :
-                HttpStatus.BAD_REQUEST
-        );
-    }
-
-    @DeleteMapping("/units/{unitId}")
-    public ResponseEntity deleteUnitById(@Valid @PathVariable Long unitId) {
-
-        GenericResponse response = service.deleteById(unitId);
-
-        return new ResponseEntity<>(response, null, (response.getData() != null) ?
-                HttpStatus.OK :
-                HttpStatus.BAD_REQUEST
-        );
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/units")
-    public ResponseEntity postDepartment(@Valid @RequestBody Unit unit) {
-        GenericResponse response = service.postUnit(unit);
+    public ResponseEntity postUnit(@Valid @RequestBody Unit newUnit) {
+        GenericResponse response = service.postUnit(newUnit);
 
-        if(response.getError() != null) {
-            return new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/units/{unitId}")
-    public ResponseEntity putUnit(@Valid @RequestBody Unit unit, @PathVariable Long unitId) {
-        GenericResponse response = service.putUnit(unit, unitId);
+    public ResponseEntity putUnit(@Valid @RequestBody Unit newUnit, @PathVariable Long unitId) {
+        GenericResponse response = service.putUnit(newUnit, unitId);
 
-        if(response.getError() != null) {
-            return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
 
     @PatchMapping("/units/{unitId}")
     public ResponseEntity patchUnit(@RequestBody Map<String, Object> map, @PathVariable Long unitId) {
         GenericResponse response = service.patchUnit(map, unitId);
 
-        if(response.getError() != null) {
-            return  new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(response.getData(), null, HttpStatus.OK);
+        return response.getData() != null ?
+                new ResponseEntity<>(response.getData(),null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(),null, HttpStatus.BAD_REQUEST);
     }
 }

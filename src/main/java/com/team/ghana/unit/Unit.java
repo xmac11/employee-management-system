@@ -12,7 +12,7 @@ public class Unit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Unit name must not be blank or null")
+    @NotBlank(message = "Unit name must not be blank")
     private String name;
     @NotNull(message = "Department property must not be null")
     @ManyToOne

@@ -1,5 +1,7 @@
 package com.team.ghana.unit;
 
+import com.team.ghana.businessUnit.BusinessUnit;
+import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.department.Department;
 import com.team.ghana.department.DepartmentRepository;
 import com.team.ghana.errorHandling.CustomError;
@@ -25,47 +27,35 @@ public class UnitService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public GenericResponse getAllUnits() {
+    public GenericResponse<List<UnitResponse>> getAllUnits() {
 
         List<Unit> unitList = unitRepository.findAll();
 
         return new GenericResponse<>(mapper.mapUnitListToUnitResponseList(unitList));
     }
 
-    public GenericResponse getUnitById(Long id) {
+    public GenericResponse<UnitResponse> getUnitById(Long unitId) {
 
-        Unit unit = unitRepository.findUnitById(id);
+        Unit unit = unitRepository.findUnitById(unitId);
 
         return unit == null ?
-                new GenericResponse<>(
-                        new CustomError(
-                        0,
-                        "Error : Bad Input",
-                        "Unit with Id: " + id + " does not exist"
-                        )
-                ) :
+                new GenericResponse<>(new CustomError(0, "Error", "Unit with Id: " + unitId + " does not exist")) :
                 new GenericResponse<>(mapper.mapUnitToUnitResponse(unit));
     }
 
-    public GenericResponse deleteById(Long unitId) {
-
-        Unit unit = unitRepository.findUnitById(unitId);
-        unitRepository.delete(unit);
-        GenericResponse response = new GenericResponse<>(mapper.mapUnitToUnitResponse(unit));
-        return response;
-    }
-
-    public GenericResponse<Unit> postUnit(Unit unit) {
-        if(unit.getId() != null) {
+    public GenericResponse<Unit> postUnit(Unit newUnit) {
+        if(newUnit.getId() != null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Unit's Id is set automatically, do not try to set it"));
         }
 
-        Long departmentId = unit.getDepartment().getId();
-        if(!departmentRepository.findById(departmentId).isPresent()) {
+        Long departmentId = newUnit.getDepartment().getId();
+        Department department = departmentRepository.findDepartmentById(departmentId);
+        if(department == null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Business Unit with Id: " + departmentId + " does not exist"));
         }
+        newUnit.setDepartment(department);
 
-        Unit addedUnit = unitRepository.save(unit);
+        Unit addedUnit = unitRepository.save(newUnit);
 
         return new GenericResponse<>(addedUnit);
     }
@@ -77,7 +67,7 @@ public class UnitService {
 
         Long departmentId = newUnit.getDepartment().getId();
         if(!departmentRepository.findById(departmentId).isPresent()) {
-            return new GenericResponse<>(new CustomError(0, "Error", "Business Unit with Id: " + departmentId + " does not exist"));
+            return new GenericResponse<>(new CustomError(0, "Error", "Department with Id: " + departmentId + " does not exist"));
         }
 
         newUnit.setId(unitId);
@@ -88,7 +78,7 @@ public class UnitService {
 
     public GenericResponse<Unit> patchUnit(Map<String, Object> map, Long unitId) {
         if(!unitRepository.findById(unitId).isPresent()) {
-            return new GenericResponse<>(new CustomError(0, "Error", "Unit Unit with Id: " + unitId + " does not exist"));
+            return new GenericResponse<>(new CustomError(0, "Error", "Unit with Id: " + unitId + " does not exist"));
         }
 
         Unit retrievedUnit = unitRepository.findUnitById(unitId);
@@ -103,7 +93,7 @@ public class UnitService {
 
             Type type = field.getGenericType();
             if(type.equals(Department.class)) {
-                this.handleDepartmentPatch(retrievedUnit, value, type);
+                this.handleDepartmentPatch(retrievedUnit, value);
             }
             else {
                 ReflectionUtils.setField(field, retrievedUnit, value);
@@ -115,14 +105,20 @@ public class UnitService {
         return new GenericResponse<>(updatedUnit);
     }
 
-    private void handleDepartmentPatch(Unit retrievedUnit, Object value, Type type) {
+    private void handleDepartmentPatch(Unit retrievedUnit, Object value) {
         if(value instanceof Map<?, ?>) {
             Map<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) value;
             for(Object obj : linkedHashMap.keySet()) {
                 if(!String.valueOf(obj).equalsIgnoreCase("id")) {
-                    throw new FieldNotFoundException("Please patch Departments by their Id");
+                    throw new FieldNotFoundException("Please patch Department by its Id");
                 }
-                Department department = departmentRepository.findDepartmentById(Long.valueOf((Integer) linkedHashMap.get("id")));
+
+                Long departmentId = Long.valueOf((Integer) linkedHashMap.get("id"));
+                Department department = departmentRepository.findDepartmentById(departmentId);
+
+                if(department == null) {
+                    throw new FieldNotFoundException("Department with Id " + departmentId + " does not exist");
+                }
                 retrievedUnit.setDepartment(department);
             }
         }
