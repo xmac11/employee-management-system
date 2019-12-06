@@ -138,8 +138,18 @@ public class EmployeeService {
         }
     }
 
-    public void deleteEmployeeById(Long employeeId) {
+    public GenericResponse deleteEmployeeById(Long employeeId) {
+        if(!employeeRepository.findById(employeeId).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Employee with Id " + employeeId + " does not exist"));
+        }
+        // TODO: Make sure corresponding tasks, if any, are updated (i.e. employee is deleted from the list that a Task holds)
         employeeRepository.deleteById(employeeId);
+
+        if(employeeRepository.findById(employeeId).isPresent()) {
+            return new GenericResponse<>(new CustomError(0, "Error", "Employee with Id " + employeeId + " was not deleted"));
+        }
+
+        return new GenericResponse<>("Employee with Id " + employeeId + " was deleted");
     }
 
     // employee strategy pattern

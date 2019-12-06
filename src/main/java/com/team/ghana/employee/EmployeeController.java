@@ -63,8 +63,12 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/employees/{employeeId}")
-    public void deleteEmployee(@PathVariable Long employeeId) {
-        employeeService.deleteEmployeeById(employeeId);
+    public ResponseEntity deleteEmployee(@PathVariable Long employeeId) {
+        GenericResponse response = employeeService.deleteEmployeeById(employeeId);
+
+        return (response.getData() != null) ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/employees/{searchCriteria}/{id}")
