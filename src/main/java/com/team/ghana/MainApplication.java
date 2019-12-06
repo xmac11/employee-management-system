@@ -46,81 +46,83 @@ public class MainApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Company company = new Company("UniSystems", "+30 211 999 7000", "19-23, Al.Pantou str.");
-		//Company company2 = new Company("Info Quest Technologies", "+30 211 999 7000", "19-23, Al.Pantou str.");
+		if(false) {
+			Company company = new Company("UniSystems", "+30 211 999 7000", "19-23, Al.Pantou str.");
+			//Company company2 = new Company("Info Quest Technologies", "+30 211 999 7000", "19-23, Al.Pantou str.");
 
-								/* Business Units */
-		BusinessUnit horizontalBU = new BusinessUnit("Horizontal", 1, company);
-		BusinessUnit verticalBU = new BusinessUnit("Vertical", 2, company);
+			/* Business Units */
+			BusinessUnit horizontalBU = new BusinessUnit("Horizontal", 1, company);
+			BusinessUnit verticalBU = new BusinessUnit("Vertical", 2, company);
 
-								/* Departments */
+			/* Departments */
 			// horizontal
-		Department itDepartment = new Department("IT & Managed Services", horizontalBU);
-		Department solutionsDepartment = new Department("Solutions & Pre-Sales", horizontalBU);
-		Department technicalDepartment = new Department("Technical", horizontalBU);
+			Department itDepartment = new Department("IT & Managed Services", horizontalBU);
+			Department solutionsDepartment = new Department("Solutions & Pre-Sales", horizontalBU);
+			Department technicalDepartment = new Department("Technical", horizontalBU);
 			// vertical
-		Department bankingDepartment = new Department("Banking & Financial Sector", verticalBU);
-		Department publicSectorDepartment = new Department("Public Sector", verticalBU);
-		Department telecomDepartment = new Department("Telecom & Enterprises", verticalBU);
+			Department bankingDepartment = new Department("Banking & Financial Sector", verticalBU);
+			Department publicSectorDepartment = new Department("Public Sector", verticalBU);
+			Department telecomDepartment = new Department("Telecom & Enterprises", verticalBU);
 
-									/* Units */
+			/* Units */
 			// ITbusinessUnitRepository
-		Unit softwareDevelopment = new Unit("Software Development", itDepartment);
-		Unit qualityAssurance = new Unit("Quality Assurance", itDepartment);
+			Unit softwareDevelopment = new Unit("Software Development", itDepartment);
+			Unit qualityAssurance = new Unit("Quality Assurance", itDepartment);
 			// Solutions
-		Unit researchAndDevelopment = new Unit("Research and Development", solutionsDepartment);
+			Unit researchAndDevelopment = new Unit("Research and Development", solutionsDepartment);
 			// Technical
-		Unit support = new Unit("IT Support", technicalDepartment);
+			Unit support = new Unit("IT Support", technicalDepartment);
 			// Banking
-		Unit auditing = new Unit("Auditing", bankingDepartment);
-		Unit accounting = new Unit("Accounting", bankingDepartment);
+			Unit auditing = new Unit("Auditing", bankingDepartment);
+			Unit accounting = new Unit("Accounting", bankingDepartment);
 
-		Employee harris = new Employee("Makrylakis", "Charalampos", "address1", "123456789", LocalDate.of(2019, 11, 12),
-				null, ACTIVE, UNISYSTEMS, softwareDevelopment, "Junior Software Developer");
-		Employee aris = new Employee("Kallergis", "Aris", "address1", "123456789", LocalDate.of(2019, 11, 12),
-				null, ACTIVE, UNISYSTEMS, softwareDevelopment, "Junior Software Developer");
-		Employee kostas = new Employee("Tsaknias", "Kostas", "address1", "123456789", LocalDate.of(2017, 2, 3),
-				null, ACTIVE, EXTERNAL, qualityAssurance, "Software Tester");
-		Employee iosif = new Employee("Gemenitzoglou", "Iosif", "address1", "123456789", LocalDate.of(2019, 7, 9),
-				null, ACTIVE, EXTERNAL, researchAndDevelopment, "Researcher");
-		Employee dimitris = new Employee("Pitsios", "Dimitris", "address1", "123456789", LocalDate.of(2019, 11, 12),
-				null, ACTIVE, EXTERNAL, support, "IT support");
-		Employee eleni = new Employee("Eleni", "Eleni", "address1", "123456789", LocalDate.of(2012, 11, 12),
-				LocalDate.of(2019, 3, 2), INACTIVE, EXTERNAL, auditing, "Auditor");
-		Employee maria = new Employee("Maria", "Maria", "address1", "123456789", LocalDate.of(2013, 4, 23),
-				LocalDate.of(2018, 5, 2), INACTIVE, EXTERNAL, accounting, "Accountant");
+			Employee harris = new Employee("Makrylakis", "Charalampos", "address1", "123456789", LocalDate.of(2019, 11, 12),
+					null, ACTIVE, UNISYSTEMS, softwareDevelopment, "Junior Software Developer");
+			Employee aris = new Employee("Kallergis", "Aris", "address1", "123456789", LocalDate.of(2019, 11, 12),
+					null, ACTIVE, UNISYSTEMS, softwareDevelopment, "Junior Software Developer");
+			Employee kostas = new Employee("Tsaknias", "Kostas", "address1", "123456789", LocalDate.of(2017, 2, 3),
+					null, ACTIVE, EXTERNAL, qualityAssurance, "Software Tester");
+			Employee iosif = new Employee("Gemenitzoglou", "Iosif", "address1", "123456789", LocalDate.of(2019, 7, 9),
+					null, ACTIVE, EXTERNAL, researchAndDevelopment, "Researcher");
+			Employee dimitris = new Employee("Pitsios", "Dimitris", "address1", "123456789", LocalDate.of(2019, 11, 12),
+					null, ACTIVE, EXTERNAL, support, "IT support");
+			Employee eleni = new Employee("Eleni", "Eleni", "address1", "123456789", LocalDate.of(2012, 11, 12),
+					LocalDate.of(2019, 3, 2), INACTIVE, EXTERNAL, auditing, "Auditor");
+			Employee maria = new Employee("Maria", "Maria", "address1", "123456789", LocalDate.of(2013, 4, 23),
+					LocalDate.of(2018, 5, 2), INACTIVE, EXTERNAL, accounting, "Accountant");
 
 
-		// save Company
-		companyRepository.save(company);
-		//companyRepository.save(company2);
+			// save Company
+			companyRepository.save(company);
+			//companyRepository.save(company2);
 
-		// save Business Units
-		businessUnitRepository.save(horizontalBU);
-		businessUnitRepository.save(verticalBU);
+			// save Business Units
+			businessUnitRepository.save(horizontalBU);
+			businessUnitRepository.save(verticalBU);
 
-		// save Departments
-		departmentRepository.save(itDepartment);
-		departmentRepository.save(solutionsDepartment);
-		departmentRepository.save(technicalDepartment);
-		departmentRepository.save(bankingDepartment);
-		departmentRepository.save(publicSectorDepartment);
-		departmentRepository.save(telecomDepartment);
+			// save Departments
+			departmentRepository.save(itDepartment);
+			departmentRepository.save(solutionsDepartment);
+			departmentRepository.save(technicalDepartment);
+			departmentRepository.save(bankingDepartment);
+			departmentRepository.save(publicSectorDepartment);
+			departmentRepository.save(telecomDepartment);
 
-		// save Units
-		unitRepository.save(softwareDevelopment);
-		unitRepository.save(qualityAssurance);
-		unitRepository.save(researchAndDevelopment);
-		unitRepository.save(support);
-		unitRepository.save(auditing);
-		unitRepository.save(accounting);
+			// save Units
+			unitRepository.save(softwareDevelopment);
+			unitRepository.save(qualityAssurance);
+			unitRepository.save(researchAndDevelopment);
+			unitRepository.save(support);
+			unitRepository.save(auditing);
+			unitRepository.save(accounting);
 
-		// save Employees
-		employeeRepository.save(harris);
-		employeeRepository.save(aris);
-		employeeRepository.save(kostas);
-		employeeRepository.save(dimitris);
-		employeeRepository.save(eleni);
-		employeeRepository.save(maria);
+			// save Employees
+			employeeRepository.save(harris);
+			employeeRepository.save(aris);
+			employeeRepository.save(kostas);
+			employeeRepository.save(dimitris);
+			employeeRepository.save(eleni);
+			employeeRepository.save(maria);
+		}
 	}
 }
