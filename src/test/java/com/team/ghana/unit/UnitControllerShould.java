@@ -1,5 +1,6 @@
 package com.team.ghana.unit;
 
+import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,9 +36,8 @@ public class UnitControllerShould {
     UnitResponse expectedUnitResponse;
     Unit unitInput;
     Map<String,Object> inputMap;
-    UnitResponse expectedUnitResponseForPatch;
-    GenericResponse<List<UnitResponse>> mockedGenericResponse;
-    GenericResponse<UnitResponse> mockedGenericResponseOne;
+    UnitResponse expectedUnitResponseAfterPatch;
+    CustomError expectedCustomError;
 
     @Before
     public void setup() {
@@ -64,9 +64,11 @@ public class UnitControllerShould {
         //patch
         inputMap = new HashMap<>();
         inputMap.put("name", "New Unit 3");
-        expectedUnitResponseForPatch =  new UnitResponse(1L, "New Unit 3", null);
+        expectedUnitResponseAfterPatch =  new UnitResponse(1L, "New Unit 3", null);
         when(unitService.patchUnit(inputMap, 1L))
-                .thenReturn(new GenericResponse(expectedUnitResponseForPatch));
+                .thenReturn(new GenericResponse(expectedUnitResponseAfterPatch));
+
+        expectedCustomError = new CustomError(0, "Error", "Something went wrong");
     }
 
     //GET
@@ -89,13 +91,35 @@ public class UnitControllerShould {
         Assert.assertEquals(expected.getBody(), actual.getBody());
         Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
     }
-    
+
+    @Test
+    public void returnErrorIfUnitIdDoesntExist() {
+        when(unitService.getUnitById(123L)).thenReturn(new GenericResponse(expectedCustomError));
+
+        ResponseEntity<CustomError> expected = new ResponseEntity<CustomError>(expectedCustomError, null ,HttpStatus.BAD_REQUEST);
+        ResponseEntity<CustomError> actual = unitController.getUnitById(123L);
+
+        Assert.assertEquals(expected.getBody(), actual.getBody());
+        Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
+    }
+
     //POST
     @Test
     public void postUnit() {
 
         ResponseEntity<UnitResponse> expected = new ResponseEntity<UnitResponse>(unitResponse1, null, HttpStatus.OK);
         ResponseEntity<UnitResponse> actual = unitController.postUnit(unit1);
+
+        Assert.assertEquals(expected.getBody(), actual.getBody());
+        Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
+    }
+
+    @Test
+    public void returnErrorIfPOSTRequestBodyIsInvalid() {
+        when(unitService.postUnit(unit1)).thenReturn(new GenericResponse(expectedCustomError));
+
+        ResponseEntity<CustomError> expected = new ResponseEntity<CustomError>(expectedCustomError, null ,HttpStatus.BAD_REQUEST);
+        ResponseEntity<CustomError> actual = unitController.postUnit(unit1);
 
         Assert.assertEquals(expected.getBody(), actual.getBody());
         Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
@@ -112,12 +136,34 @@ public class UnitControllerShould {
         Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
     }
 
+    @Test
+    public void returnErrorIfPUTRequestBodyIsInvalid() {
+        when(unitService.putUnit(unit1, 1L)).thenReturn(new GenericResponse(expectedCustomError));
+
+        ResponseEntity<CustomError> expected = new ResponseEntity<CustomError>(expectedCustomError, null ,HttpStatus.BAD_REQUEST);
+        ResponseEntity<CustomError> actual = unitController.putUnit(unit1, 1L);
+
+        Assert.assertEquals(expected.getBody(), actual.getBody());
+        Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
+    }
+
     //PATCH
     @Test
     public void patchUnitWithSpecifiedId() {
 
-        ResponseEntity<UnitResponse> expected = new ResponseEntity<UnitResponse>(expectedUnitResponseForPatch, null, HttpStatus.OK);
+        ResponseEntity<UnitResponse> expected = new ResponseEntity<UnitResponse>(expectedUnitResponseAfterPatch, null, HttpStatus.OK);
         ResponseEntity<UnitResponse> actual = unitController.patchUnit(inputMap,1L);
+
+        Assert.assertEquals(expected.getBody(), actual.getBody());
+        Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
+    }
+
+    @Test
+    public void returnErrorIfPATCHRequestBodyIsInvalid() {
+        when(unitService.patchUnit(inputMap,1L)).thenReturn(new GenericResponse(expectedCustomError));
+
+        ResponseEntity<CustomError> expected = new ResponseEntity<CustomError>(expectedCustomError, null ,HttpStatus.BAD_REQUEST);
+        ResponseEntity<CustomError> actual = unitController.patchUnit(inputMap,1L);
 
         Assert.assertEquals(expected.getBody(), actual.getBody());
         Assert.assertEquals(expected.getStatusCode(), actual.getStatusCode());
