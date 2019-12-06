@@ -1,5 +1,6 @@
 package com.team.ghana.errorHandling;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -82,4 +83,14 @@ public class InputValidator {
         return e.getMessage();
     }
 
+    /**
+     * Method which handles InvalidFormatException,
+     * for example an invalid value for an Enum.
+     */
+    @ExceptionHandler(InvalidFormatException.class)
+    @ResponseBody
+    public String handleInvalidFormatException(InvalidFormatException e) {
+        System.out.println("handleInvalidFormatException() was triggered");
+        return e.getMessage();
+    }
 }

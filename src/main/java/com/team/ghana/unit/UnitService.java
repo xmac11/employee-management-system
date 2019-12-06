@@ -11,18 +11,18 @@ import java.util.List;
 public class UnitService {
 
     @Autowired
-    UnitRepository repository;
+    private UnitRepository repository;
     @Autowired
-    UnitMapper mapper;
+    private UnitMapper mapper;
 
-    GenericResponse getAllUnits() {
+    public GenericResponse getAllUnits() {
 
         List<Unit> unitList = repository.findAll();
 
         return new GenericResponse<>(mapper.mapUnitListToUnitResponseList(unitList));
     }
 
-    GenericResponse getUnitById(Long id) {
+    public GenericResponse getUnitById(Long id) {
 
         Unit unit = repository.findUnitById(id);
 
