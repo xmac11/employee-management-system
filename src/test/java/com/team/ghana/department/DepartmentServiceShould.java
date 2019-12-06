@@ -189,9 +189,12 @@ public class DepartmentServiceShould {
         map.put("name", "newName");
         map.put("businessUnit", temp);
 
+        BusinessUnit businessUnit = new BusinessUnit("BU", 1, null);
+
         Department patchedBusinessUnitOfDepartment = new Department(department.getName(), verticalBU);
         when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(patchedBusinessUnitOfDepartment));
         when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedBusinessUnitOfDepartment);
+        when(businessUnitRepository.findBusinessUnitById(anyLong())).thenReturn(businessUnit);
         when(departmentRepository.save(any())).thenReturn(patchedBusinessUnitOfDepartment);
 
         GenericResponse response = departmentService.patchDepartment(map, 1L);
@@ -211,6 +214,9 @@ public class DepartmentServiceShould {
         Assert.assertNull(response.getData());
     }
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Test(expected = FieldNotFoundException.class)
     public void throwExceptionForInvalidField() {
         Map<String, Object> map = new HashMap<>();
@@ -220,10 +226,9 @@ public class DepartmentServiceShould {
         when(departmentRepository.findDepartmentById(anyLong())).thenReturn(patchedDepartmentName);
 
         departmentService.patchDepartment(map, 1L);
-    }
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+        exception.expectMessage("wrongField is not a valid field");
+    }
 
     @Test(expected = FieldNotFoundException.class)
     public void throwExceptionForInvalidFieldInBusinessUnit() {
@@ -234,10 +239,25 @@ public class DepartmentServiceShould {
         map.put("businessUnit", temp);
 
         when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
-        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(any());
 
         departmentService.patchDepartment(map, 1L);
 
         exception.expectMessage("Please patch Business Units by their Id");
+    }
+
+    @Test(expected = FieldNotFoundException.class)
+    public void  throwExceptionForNotExistingBusinessUnit() {
+        Map<String, Integer> temp = new LinkedHashMap<>();
+        temp.put("id", 22);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("businessUnit", temp);
+
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
+        when(departmentRepository.findDepartmentById(anyLong())).thenReturn(department);
+
+        departmentService.patchDepartment(map, 1L);
+
+        exception.expectMessage("Business Unit with Id"  + temp.get("id") + " does not exist");
     }
 }

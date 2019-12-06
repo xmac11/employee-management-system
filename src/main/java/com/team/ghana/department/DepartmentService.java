@@ -101,7 +101,7 @@ public class DepartmentService {
 
             Type type = field.getGenericType();
             if(type.equals(BusinessUnit.class)) {
-                this.handleBusinessUnitPatch(retrievedDepartment, value, type);
+                this.handleBusinessUnitPatch(retrievedDepartment, value);
             }
             else {
                 ReflectionUtils.setField(field, retrievedDepartment, value);
@@ -113,14 +113,19 @@ public class DepartmentService {
         return new GenericResponse<>(updatedDepartment);
     }
 
-    private void handleBusinessUnitPatch(Department retrievedDepartment, Object value, Type type) {
+    private void handleBusinessUnitPatch(Department retrievedDepartment, Object value) {
         if(value instanceof Map<?, ?>) {
             Map<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) value;
             for(Object obj : linkedHashMap.keySet()) {
                 if(!String.valueOf(obj).equalsIgnoreCase("id")) {
                     throw new FieldNotFoundException("Please patch Business Units by their Id");
                 }
-                BusinessUnit businessUnit = businessUnitRepository.findBusinessUnitById(Long.valueOf((Integer) linkedHashMap.get("id")));
+                Long businessUnitId = Long.valueOf((Integer) linkedHashMap.get("id"));
+                BusinessUnit businessUnit = businessUnitRepository.findBusinessUnitById(businessUnitId);
+
+                if(businessUnit == null) {
+                    throw new FieldNotFoundException("Business Unit with Id " + businessUnitId + " does not exist");
+                }
                 retrievedDepartment.setBusinessUnit(businessUnit);
             }
         }

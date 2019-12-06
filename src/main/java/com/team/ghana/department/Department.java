@@ -16,7 +16,7 @@ public class Department {
     @NotBlank(message = "Department's name must not be blank or field not valid")
     private String name;
 
-    @NotNull(message = "Business Unit must not be null or field not valid")
+    @NotNull(message = "Business Unit must not be null")
     @ManyToOne
     private BusinessUnit businessUnit;
 
