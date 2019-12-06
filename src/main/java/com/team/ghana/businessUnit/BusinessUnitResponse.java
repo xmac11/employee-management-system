@@ -2,25 +2,17 @@ package com.team.ghana.businessUnit;
 
 import com.team.ghana.company.Company;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
-@Entity
-public class BusinessUnit {
+public class BusinessUnitResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Name must not be blank")
     private String name;
     private int floor;
-    @ManyToOne
     private Company company;
 
-    public BusinessUnit() {
-    }
-
-    public BusinessUnit(String name, int floor, Company company) {
+    public BusinessUnitResponse(Long id, String name, int floor, Company company) {
+        this.id = id;
         this.name = name;
         this.floor = floor;
         this.company = company;
@@ -58,4 +50,19 @@ public class BusinessUnit {
         this.company = company;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BusinessUnitResponse that = (BusinessUnitResponse) o;
+        return floor == that.floor &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(company, that.company);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, floor, company);
+    }
 }

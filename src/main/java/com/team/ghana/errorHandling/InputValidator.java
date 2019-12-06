@@ -2,6 +2,7 @@ package com.team.ghana.errorHandling;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,9 +16,23 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+* -- Validating the input of your REST API with Spring
+* https://dimitr.im/validating-the-input-of-your-rest-api-with-spring
+*
+* -- Difference between ConstraintViolationException and MethodArgumentNotValidException
+* https://stackoverflow.com/questions/57010688/what-is-the-difference-between-constraintviolationexception-and-methodargumentno
+* */
+
+/**
+ * Class to catch certain types of exceptions in order to display the appropriate error message.
+ * */
 @ControllerAdvice
 public class InputValidator {
 
+    /**
+     * Method which catches exceptions caused when validation fails for fields annotated with @Valid
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public List<String> handleValidationException(MethodArgumentNotValidException e) {
@@ -29,6 +44,19 @@ public class InputValidator {
                 .collect(Collectors.toList());
     }
 
+    /*
+    * https://stackoverflow.com/questions/53141761/how-catch-hibernate-jpa-constraint-violations-in-spring-boot
+    * https://stackoverflow.com/questions/45070642/springboot-doesnt-handle-javax-validation-constraintviolationexception
+    *
+    * -- You cannot catch ConstraintViolationException.class because it is not propagated to that layer of your code,
+    * it's caught by the lower layers, wrapped and rethrown under another type. So that the exception that hits your
+    * web layer is not a ConstraintViolationException.In this case, it is a TransactionSystemException.
+    * */
+
+    /**
+     * Method which catches exception thrown when a general transaction system error is encountered.
+     * Checks if the cause is a ConstraintViolationException.
+     */
     @ExceptionHandler(TransactionSystemException.class)
     @ResponseBody
     public List<String> handleConstraintViolation(TransactionSystemException e) {
@@ -47,6 +75,9 @@ public class InputValidator {
         return null;
     }
 
+    /**
+     * Method which handles invalid field name in PATCH requests.
+     */
     @ExceptionHandler(FieldNotFoundException.class)
     @ResponseBody
     public String handleFieldNotFound(FieldNotFoundException e) {
@@ -56,9 +87,19 @@ public class InputValidator {
 
     @ExceptionHandler(NumberFormatException.class)
     @ResponseBody
-    public ResponseEntity<CustomError> handleNumberFormat() {
-
+    public ResponseEntity<CustomError> handleNumberFormatException() {
+        System.out.println("handleNumberFormatException() was triggered");
         return new ResponseEntity<>(new CustomError(0, "Wrong input type", "Please input correct parameter type"), null, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Method which handles InvalidFormatException,
+     * for example an invalid value for an Enum.
+     */
+    @ExceptionHandler(InvalidFormatException.class)
+    @ResponseBody
+    public String handleInvalidFormatException(InvalidFormatException e) {
+        System.out.println("handleInvalidFormatException() was triggered");
+        return e.getMessage();
+    }
 }
