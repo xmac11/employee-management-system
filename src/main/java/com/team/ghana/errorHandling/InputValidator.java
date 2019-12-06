@@ -1,5 +1,7 @@
 package com.team.ghana.errorHandling;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.ObjectError;
@@ -81,6 +83,13 @@ public class InputValidator {
     public String handleFieldNotFound(FieldNotFoundException e) {
         System.out.println("handleFieldNotFound() was triggered");
         return e.getMessage();
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseBody
+    public ResponseEntity<CustomError> handleNumberFormatException() {
+        System.out.println("handleNumberFormatException() was triggered");
+        return new ResponseEntity<>(new CustomError(0, "Wrong input type", "Please input correct parameter type"), null, HttpStatus.BAD_REQUEST);
     }
 
     /**

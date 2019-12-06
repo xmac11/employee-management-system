@@ -47,7 +47,7 @@ public class MainApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		Company company = new Company("UniSystems", "+30 211 999 7000", "19-23, Al.Pantou str.");
-		Company company2 = new Company("Info Quest Technologies", "+30 211 999 7000", "19-23, Al.Pantou str.");
+		//Company company2 = new Company("Info Quest Technologies", "+30 211 999 7000", "19-23, Al.Pantou str.");
 
 								/* Business Units */
 		BusinessUnit horizontalBU = new BusinessUnit("Horizontal", 1, company);
@@ -93,7 +93,7 @@ public class MainApplication implements CommandLineRunner {
 
 		// save Company
 		companyRepository.save(company);
-		companyRepository.save(company2);
+		//companyRepository.save(company2);
 
 		// save Business Units
 		businessUnitRepository.save(horizontalBU);
