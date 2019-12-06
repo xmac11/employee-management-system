@@ -3,6 +3,7 @@ package com.team.ghana.businessUnit;
 import com.team.ghana.company.Company;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class BusinessUnit {
@@ -10,6 +11,7 @@ public class BusinessUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Name must not be blank")
     private String name;
     private int floor;
     @ManyToOne
