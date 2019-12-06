@@ -1,4 +1,4 @@
-package com.team.ghana;
+package com.team.ghana.businessUnit;
 
 import com.team.ghana.businessUnit.BusinessUnit;
 import com.team.ghana.businessUnit.BusinessUnitMapper;

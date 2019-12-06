@@ -1,6 +1,8 @@
 package com.team.ghana.department;
 
+import com.team.ghana.businessUnit.BusinessUnit;
 import com.team.ghana.businessUnit.BusinessUnitRepository;
+import com.team.ghana.company.Company;
 import com.team.ghana.errorHandling.CustomError;
 import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
@@ -9,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +29,7 @@ public class DepartmentService {
     @Autowired
     private BusinessUnitRepository businessUnitRepository;
 
-    public GenericResponse getDepartments() {
+    public GenericResponse<List<DepartmentResponse>> getDepartments() {
         List<Department> retrievedDepartments = departmentRepository.findAll();
 
         List<DepartmentResponse> departmentResponses = departmentMapper.mapDepartmentListToDepartmentResponseList(retrievedDepartments);
@@ -33,7 +38,7 @@ public class DepartmentService {
     }
 
     public GenericResponse<DepartmentResponse> getDepartmentByID(Long departmentID) {
-        Department department = departmentRepository.findById(departmentID).orElse(null);
+        Department department = departmentRepository.findDepartmentById(departmentID);
 
         if(department == null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department with ID: " + departmentID + " does not exist"));
@@ -42,19 +47,19 @@ public class DepartmentService {
         return new GenericResponse<>(departmentMapper.mapDepartmentToDepartmentResponse(department));
     }
 
-    // TODO: Check if company's ID exists as well?
-    // TODO: Should the postman json include only BusinessUnit and Company ID's and fill everything else automatically?
-    public GenericResponse<Department> postDepartment(Department department) {
-        if(department.getId() != null) {
+    public GenericResponse<Department> postDepartment(Department newDepartment) {
+        if(newDepartment.getId() != null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Department's ID is set automatically, do not try to set it"));
         }
 
-        Long businessUnitID = department.getBusinessUnit().getId();
-        if(!businessUnitRepository.findById(businessUnitID).isPresent()) {
+        Long businessUnitID = newDepartment.getBusinessUnit().getId();
+        BusinessUnit businessUnit = businessUnitRepository.findBusinessUnitById(businessUnitID);
+        if(businessUnit == null) {
             return new GenericResponse<>(new CustomError(0, "Error", "Business Unit with ID: " + businessUnitID + " does not exist"));
         }
+        newDepartment.setBusinessUnit(businessUnit);
 
-        Department addedDepartment = departmentRepository.save(department);
+        Department addedDepartment = departmentRepository.save(newDepartment);
 
         return new GenericResponse<>(addedDepartment);
     }
@@ -93,11 +98,36 @@ public class DepartmentService {
             }
 
             field.setAccessible(true);
-            ReflectionUtils.setField(field, retrievedDepartment, value);
+
+            Type type = field.getGenericType();
+            if(type.equals(BusinessUnit.class)) {
+                this.handleBusinessUnitPatch(retrievedDepartment, value);
+            }
+            else {
+                ReflectionUtils.setField(field, retrievedDepartment, value);
+            }
         });
 
         Department updatedDepartment = departmentRepository.save(retrievedDepartment);
 
         return new GenericResponse<>(updatedDepartment);
+    }
+
+    private void handleBusinessUnitPatch(Department retrievedDepartment, Object value) {
+        if(value instanceof Map<?, ?>) {
+            Map<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) value;
+            for(Object obj : linkedHashMap.keySet()) {
+                if(!String.valueOf(obj).equalsIgnoreCase("id")) {
+                    throw new FieldNotFoundException("Please patch Business Units by their Id");
+                }
+                Long businessUnitId = Long.valueOf((Integer) linkedHashMap.get("id"));
+                BusinessUnit businessUnit = businessUnitRepository.findBusinessUnitById(businessUnitId);
+
+                if(businessUnit == null) {
+                    throw new FieldNotFoundException("Business Unit with Id " + businessUnitId + " does not exist");
+                }
+                retrievedDepartment.setBusinessUnit(businessUnit);
+            }
+        }
     }
 }

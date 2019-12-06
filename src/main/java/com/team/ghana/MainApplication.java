@@ -76,19 +76,19 @@ public class MainApplication implements CommandLineRunner {
 		Unit accounting = new Unit("Accounting", bankingDepartment);
 
 		Employee harris = new Employee("Makrylakis", "Charalampos", "address1", "123456789", LocalDate.of(2019, 11, 12),
-				null, ACTIVE, UNISYSTEMS, "Unisystems", softwareDevelopment, "Junior Software Developer");
-		Employee aris = new Employee("Aris", "Kallergis", "address1", "123456789", LocalDate.of(2019, 11, 12),
-				null, ACTIVE, UNISYSTEMS, "Unisystems", softwareDevelopment, "Junior Software Developer");
-		Employee kostas = new Employee("Kostas", "Tsaknias", "address1", "123456789", LocalDate.of(2017, 2, 3),
-				null, ACTIVE, EXTERNAL, "Unisystems", qualityAssurance, "Software Tester");
-		Employee iosif = new Employee("Iosif", "Gemenitzoglou", "address1", "123456789", LocalDate.of(2019, 7, 9),
-				null, ACTIVE, EXTERNAL, "Unisystems", researchAndDevelopment, "Researcher");
-		Employee dimitris = new Employee("Dimitris", "Pitsios", "address1", "123456789", LocalDate.of(2019, 11, 12),
-				null, ACTIVE, EXTERNAL, "Unisystems", support, "IT support");
+				null, ACTIVE, UNISYSTEMS, softwareDevelopment, "Junior Software Developer");
+		Employee aris = new Employee("Kallergis", "Aris", "address1", "123456789", LocalDate.of(2019, 11, 12),
+				null, ACTIVE, UNISYSTEMS, softwareDevelopment, "Junior Software Developer");
+		Employee kostas = new Employee("Tsaknias", "Kostas", "address1", "123456789", LocalDate.of(2017, 2, 3),
+				null, ACTIVE, EXTERNAL, qualityAssurance, "Software Tester");
+		Employee iosif = new Employee("Gemenitzoglou", "Iosif", "address1", "123456789", LocalDate.of(2019, 7, 9),
+				null, ACTIVE, EXTERNAL, researchAndDevelopment, "Researcher");
+		Employee dimitris = new Employee("Pitsios", "Dimitris", "address1", "123456789", LocalDate.of(2019, 11, 12),
+				null, ACTIVE, EXTERNAL, support, "IT support");
 		Employee eleni = new Employee("Eleni", "Eleni", "address1", "123456789", LocalDate.of(2012, 11, 12),
-				LocalDate.of(2019, 3, 2), INACTIVE, EXTERNAL, "Unisystems", auditing, "Auditor");
+				LocalDate.of(2019, 3, 2), INACTIVE, EXTERNAL, auditing, "Auditor");
 		Employee maria = new Employee("Maria", "Maria", "address1", "123456789", LocalDate.of(2013, 4, 23),
-				LocalDate.of(2018, 5, 2), INACTIVE, EXTERNAL, "Unisystems", accounting, "Accountant");
+				LocalDate.of(2018, 5, 2), INACTIVE, EXTERNAL, accounting, "Accountant");
 
 
 		// save Company
