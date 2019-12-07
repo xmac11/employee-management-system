@@ -1,7 +1,5 @@
 package com.team.ghana.apiUser;
 
-import java.io.*;
-
 public class InvalidEmailException extends Exception {
 
     public String msg(User user){

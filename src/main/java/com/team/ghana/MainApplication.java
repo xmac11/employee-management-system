@@ -1,5 +1,7 @@
 package com.team.ghana;
 
+import com.team.ghana.apiUser.User;
+import com.team.ghana.apiUser.UserService;
 import com.team.ghana.businessUnit.BusinessUnit;
 import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.company.Company;
@@ -8,6 +10,7 @@ import com.team.ghana.department.Department;
 import com.team.ghana.department.DepartmentRepository;
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
+import com.team.ghana.enums.UserRole;
 import com.team.ghana.unit.Unit;
 import com.team.ghana.unit.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,9 @@ public class MainApplication implements CommandLineRunner {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
@@ -120,5 +126,10 @@ public class MainApplication implements CommandLineRunner {
 		employeeRepository.save(dimitris);
 		employeeRepository.save(eleni);
 		employeeRepository.save(maria);
+
+		// User me = new User("dimitrispitsos@yahoo.gr","Jimi","111", UserRole.ADMIN);
+		// userService.registerUser(me);
+		User anotherMe = new User("dimitrispitsos@yahoo.gr","Jimmy", "112", UserRole.USER);
+		userService.registerUser(anotherMe);
 	}
 }
