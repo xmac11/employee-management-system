@@ -19,10 +19,10 @@ public class JwtAuthController {
     @Autowired
     private JwtTokenUtilities util;
     @Autowired
-    private JwtUDetailsService service;
+    private JwtUserDetailsService service;
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequestPJ authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
@@ -32,7 +32,7 @@ public class JwtAuthController {
 
         final String token = util.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtResponsePJ(token));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
     private void authenticate(String username, String password) throws Exception {

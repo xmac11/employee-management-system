@@ -2,17 +2,17 @@ package com.team.ghana.authJwt;
 
 import java.io.Serializable;
 
-public class JwtRequestPJ implements Serializable {
+public class JwtAuthenticationRequest implements Serializable {
 
     private static final long serialVersionUID = 0x1370cc7fL;
 
     private String username;
     private String password;
 
-    public JwtRequestPJ() {
+    public JwtAuthenticationRequest() {
     }
 
-    public JwtRequestPJ(String username, String password) {
+    public JwtAuthenticationRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

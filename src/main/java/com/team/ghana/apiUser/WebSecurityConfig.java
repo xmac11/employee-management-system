@@ -1,6 +1,6 @@
 package com.team.ghana.apiUser;
 
-import com.team.ghana.apiUserService.UDetailsService;
+import com.team.ghana.apiUserService.MyUserDetailsService;
 import com.team.ghana.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,10 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 */
-public class Securitas extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UDetailsService uDetailsService;  // class that implements UserDetailsService, to confirm UserDetails
+    private MyUserDetailsService uDetailsService;  // class that implements UserDetailsService, to confirm UserDetails
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

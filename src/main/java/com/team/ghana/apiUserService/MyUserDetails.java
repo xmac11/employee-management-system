@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class UDetails implements UserDetails {
+public class MyUserDetails implements UserDetails {
 
     User user;  // this user is set in UDetailsService class
 

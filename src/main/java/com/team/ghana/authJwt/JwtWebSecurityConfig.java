@@ -10,7 +10,6 @@ package com.team.ghana.authJwt;
 // }
 // the /auth endpoint is handled by JwtAuthController
 
-import com.team.ghana.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,14 +29,14 @@ import static com.team.ghana.enums.UserRole.ADMIN;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class JwtSecuritas extends WebSecurityConfigurerAdapter {
+public class JwtWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthEntryPoint jwtAuthEntryPoint;
     @Autowired
-    private JwtReqFilter jwtRequestFilter;
+    private JwtRequestFilter jwtRequestFilter;
     @Autowired
-    private JwtUDetailsService uDetailsServiceJWT;  // class that implements UserDetailsService, to confirm UserDetails
+    private JwtUserDetailsService uDetailsServiceJWT;  // class that implements UserDetailsService, to confirm UserDetails
 
     @Bean   // this is needed to authenticate a user in AuthController
     @Override

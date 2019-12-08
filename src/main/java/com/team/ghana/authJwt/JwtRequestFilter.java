@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtReqFilter extends OncePerRequestFilter {
+public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtUDetailsService service;
+    private JwtUserDetailsService service;
     @Autowired
     private JwtTokenUtilities util;
 
