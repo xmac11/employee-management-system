@@ -8,6 +8,8 @@ import com.team.ghana.department.Department;
 import com.team.ghana.department.DepartmentRepository;
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
+import com.team.ghana.task.Task;
+import com.team.ghana.task.TaskRepository;
 import com.team.ghana.unit.Unit;
 import com.team.ghana.unit.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import static com.team.ghana.enums.ContractType.EXTERNAL;
 import static com.team.ghana.enums.ContractType.UNISYSTEMS;
 import static com.team.ghana.enums.Status.ACTIVE;
 import static com.team.ghana.enums.Status.INACTIVE;
+import static com.team.ghana.enums.TaskStatus.NEW;
 
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
@@ -39,6 +43,9 @@ public class MainApplication implements CommandLineRunner {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private TaskRepository taskRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
@@ -89,7 +96,30 @@ public class MainApplication implements CommandLineRunner {
 				LocalDate.of(2019, 3, 2), INACTIVE, EXTERNAL, auditing, "Auditor");
 		Employee maria = new Employee("Maria", "Maria", "address1", "123456789", LocalDate.of(2013, 4, 23),
 				LocalDate.of(2018, 5, 2), INACTIVE, EXTERNAL, accounting, "Accountant");
+		Employee katerina = new Employee("Katerina", "Katerina", "address1", "123456789", LocalDate.of(2013, 4, 23),
+				LocalDate.of(2018, 5, 2), INACTIVE, EXTERNAL, accounting, "Accountant");
 
+													/* Tasks */
+		Task task1 = new Task("Testing", "Test all methods", 2, 3, 2, NEW);
+		task1.addUpdate("Tested mappers");
+		task1.addUpdate("Tested controllers");
+		task1.addUpdate("Acceptance testing");
+		task1.addEmployeeIfSameUnit(harris);
+		task1.addEmployeeIfSameUnit(aris);
+		//task1.addEmployeeIfSameUnit(kostas); // different unit, this should not be added
+
+		Task task2 = new Task("Debugging", "Debug all methods", 2, 4, 10, NEW);
+		task2.addUpdate("Talked with client");
+		task2.addEmployeeIfSameUnit(kostas);
+		//task2.addEmployeeIfSameUnit(iosif); // different unit, this should not be added
+		//dimitris.addTaskIfSameUnit(task2); // different unit, this should not be added
+
+		Task task3 = new Task("Analysis", "Create project specifications", 2, 4, 10, NEW);
+		task3.addUpdate("Did requirements analysis");
+		task3.addUpdate("Created UML diagrams");
+		task3.addUpdate("Started programming");
+		task3.addEmployeeIfSameUnit(maria);
+		task3.addEmployeeIfSameUnit(katerina);
 
 		// save Company
 		companyRepository.save(company);
@@ -115,12 +145,19 @@ public class MainApplication implements CommandLineRunner {
 		unitRepository.save(auditing);
 		unitRepository.save(accounting);
 
+		// save Tasks
+		taskRepository.save(task1);
+		taskRepository.save(task2);
+		taskRepository.save(task3);
+
 		// save Employees
 		employeeRepository.save(harris);
 		employeeRepository.save(aris);
 		employeeRepository.save(kostas);
+		employeeRepository.save(iosif);
 		employeeRepository.save(dimitris);
 		employeeRepository.save(eleni);
 		employeeRepository.save(maria);
+		employeeRepository.save(katerina);
 	}
 }
