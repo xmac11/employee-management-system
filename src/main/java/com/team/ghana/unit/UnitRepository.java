@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface UnitRepository extends JpaRepository<Unit, Long> {
 
+    Unit findUnitById(Long unitId);
+
     @Override
     @RestResource(exported = false)
     <S extends Unit> List<S> saveAll(Iterable<S> entities);
@@ -31,15 +33,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     @Override
     @RestResource(exported = false)
-    <S extends Unit> S save(S entity);
-
-    @Override
-    @RestResource(exported = false)
     void deleteById(Long aLong);
-
-    @Override
-    @RestResource(exported = false)
-    void delete(Unit entity);
 
     @Override
     @RestResource(exported = false)
@@ -48,6 +42,4 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Override
     @RestResource(exported = false)
     void deleteAll();
-
-    Unit findUnitById(Long id);
 }

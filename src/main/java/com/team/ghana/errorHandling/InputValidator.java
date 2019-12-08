@@ -1,5 +1,7 @@
 package com.team.ghana.errorHandling;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.ObjectError;
@@ -83,13 +85,6 @@ public class InputValidator {
         return e.getMessage();
     }
 
-    @ExceptionHandler(InvalidFormatException.class)
-    @ResponseBody
-    public String handleInvalidFormatException(InvalidFormatException e) {
-        System.out.println("handleInvalidFormatException() was triggered");
-        return e.getMessage();
-    }
-
     /**
      * Method which handles assigning a task to employees from different units.
      */
@@ -100,4 +95,21 @@ public class InputValidator {
         return e.getMessage();
     }
 
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseBody
+    public ResponseEntity<CustomError> handleNumberFormatException() {
+        System.out.println("handleNumberFormatException() was triggered");
+        return new ResponseEntity<>(new CustomError(0, "Wrong input type", "Please input correct parameter type"), null, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Method which handles InvalidFormatException,
+     * for example an invalid value for an Enum.
+     */
+    @ExceptionHandler(InvalidFormatException.class)
+    @ResponseBody
+    public String handleInvalidFormatException(InvalidFormatException e) {
+        System.out.println("handleInvalidFormatException() was triggered");
+        return e.getMessage();
+    }
 }

@@ -7,6 +7,7 @@ import com.team.ghana.task.Task;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -18,15 +19,19 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
-    private String lastName, firstName;
+    @NotBlank(message = "Last name must not be blank")
+    private String lastName;
+    @NotBlank(message = "First name must not be blank")
+    private String firstName;
     private String homeAddress;
     private String phoneNumber;
-    @NotNull
+    @NotNull(message = "Hiring date must not be blank")
     private LocalDate hireDate;
     private LocalDate redundancyDate;
+    @NotNull(message = "Status must not be null")
     private Status status;
     private ContractType contractType;
+    @NotNull(message = "Unit must not be null or field not valid")
     @ManyToOne
     private Unit unit;
     private String position;
@@ -194,5 +199,10 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hash(id, lastName, firstName, homeAddress, phoneNumber, hireDate, redundancyDate, status, contractType, unit, position, tasks);
+    }
+    @AssertTrue(message = "Redundancy date should be null or after the hiring date")
+    private boolean isAssertTrue() {
+        return this.redundancyDate == null ||
+                redundancyDate.isAfter(hireDate);
     }
 }
