@@ -2,16 +2,22 @@ package com.team.ghana.apiUser;
 
 import com.team.ghana.enums.UserRole;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class User {
 
     @Id
     private String email;
+    @Column(unique = true)
     private String username;
+    @NotBlank
     private String password;
+    @NotNull
     private UserRole role;
 
     public User() {

@@ -14,6 +14,7 @@ import com.team.ghana.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,6 +24,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.team.ghana.enums.UserRole.ADMIN;
 
 @Configuration
 @EnableWebSecurity
@@ -50,17 +53,21 @@ public class JwtSecuritas extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/auth").permitAll();
+        // allow H2 https://stackoverflow.com/questions/43794721/spring-boot-h2-console-throws-403-with-spring-security-1-5-2
+        http.csrf().disable().headers().frameOptions().sameOrigin();
+
+        http.authorizeRequests().antMatchers("/auth").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/h2-console/**").permitAll();
 
         // all other requests need to be authenticated
-
-        http.authorizeRequests()
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/departments/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/departments/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers("/ghana/**").authenticated()
-                .antMatchers("**/post").hasRole(UserRole.ADMIN.toString())
+                .antMatchers("**/post").hasRole(ADMIN.toString())
                 .anyRequest().authenticated().and()
-        .exceptionHandling()
+                .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthEntryPoint).and()
 
                 /* make sure we use stateless session; session won't be used to store user's state. */
