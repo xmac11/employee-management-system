@@ -85,6 +85,16 @@ public class InputValidator {
         return e.getMessage();
     }
 
+    /**
+     * Method which handles assigning a task to employees from different units.
+     */
+    @ExceptionHandler(EmployeeInDifferentUnitException.class)
+    @ResponseBody
+    public String handleEmployeesInDifferentUnit(EmployeeInDifferentUnitException e) {
+        System.out.println("handleEmployeesInDifferentUnit() was triggered");
+        return e.getMessage();
+    }
+
     @ExceptionHandler(NumberFormatException.class)
     @ResponseBody
     public ResponseEntity<CustomError> handleNumberFormatException() {
