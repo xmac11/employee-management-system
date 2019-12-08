@@ -70,26 +70,26 @@ public class JwtWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH, "/businessUnits/**").hasRole(String.valueOf(ADMIN))
 
                 // departments
-                .antMatchers(HttpMethod.GET,"/departments/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/departments/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/departments/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PUT, "/departments/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PATCH, "/departments/**").hasRole(String.valueOf(ADMIN))
 
                 // units
-                .antMatchers(HttpMethod.GET,"/units/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/units/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/units/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PUT, "/units/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PATCH, "/units/**").hasRole(String.valueOf(ADMIN))
 
                 // employees
-                .antMatchers(HttpMethod.GET,"/employees/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/employees/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/employees/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PUT, "/employees/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PATCH, "/employees/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.DELETE, "/employees/**").hasRole(String.valueOf(ADMIN))
 
                 // tasks
-                .antMatchers(HttpMethod.GET,"/tasks/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/tasks/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/tasks/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PUT, "/tasks/**").hasRole(String.valueOf(ADMIN))
                 .antMatchers(HttpMethod.PATCH, "/tasks/**").hasRole(String.valueOf(ADMIN))
