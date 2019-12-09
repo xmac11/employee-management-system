@@ -2,6 +2,7 @@ package com.team.ghana.employee;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,50 +10,32 @@ import java.util.stream.Collectors;
 public class EmployeeMapper {
 
     public EmployeeResponse mapEmployeeToEmployeeResponse(Employee employee) {
+
         return new EmployeeResponse(employee.getId(),
-                mapEmployeeFullName(employee),
+                this.mapEmployeeFullName(employee),
                 employee.getHomeAddress(),
                 employee.getPhoneNumber(),
-                mapEmployeeWorkingPeriod(employee),
+                this.mapEmployeeWorkingPeriod(employee),
                 employee.getStatus().toString(),
                 employee.getContractType().toString(),
-                employee.getCompanyName(),
                 employee.getUnit().getName(),
                 employee.getPosition());
     }
 
-    public List<EmployeeResponse> mapEmployeeListToEmployeeResponseList(List<Employee> employeeList) {
+    public List<EmployeeResponse> mapEmployeeListToEmployeeResponseList(Collection<Employee> employeeList) {
 
         return employeeList.stream()
                 .map(this::mapEmployeeToEmployeeResponse)
                 .collect(Collectors.toList());
     }
 
-    public String mapEmployeeWorkingPeriod(Employee employee) {
-
-        String hireDate = employee.getHireDate() == null ?
-                "[Missing Hire Date]" :
-                employee.getHireDate().toString();
-
-        String dismissalDate = employee.getHireDate() == null ?
-                "Contact Administration" :
-                employee.getRedundancyDate() == null ?
-                        "Present" :
-                        employee.getRedundancyDate().toString();
-
-        return hireDate + " ---> " + dismissalDate;
-    }
     public String mapEmployeeFullName(Employee employee) {
+        return employee.getFirstName() + " " + employee.getLastName();
+    }
 
-        String firstName = employee.getFirstName() == null || "".equals(employee.getFirstName()) ?
-                "[Missing First Name]" :
-                employee.getFirstName();
-        String lastName = employee.getLastName() == null || "".equals(employee.getLastName()) ?
-                "[Missing Last Name]" :
-                employee.getLastName();
-
-
-        return firstName + " " + lastName;
+    public String mapEmployeeWorkingPeriod(Employee employee) {
+        return employee.getHireDate() + " --> " +
+                (employee.getRedundancyDate() == null ? "present" : employee.getRedundancyDate());
     }
 }
 

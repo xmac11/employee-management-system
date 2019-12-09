@@ -1,4 +1,4 @@
-package com.team.ghana;
+package com.team.ghana.department;
 
 
 import com.team.ghana.businessUnit.BusinessUnit;

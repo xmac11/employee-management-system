@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BusinessUnitRepository extends JpaRepository<BusinessUnit, Long> {
 
+    BusinessUnit findBusinessUnitById(Long businessUnitId);
+
     @Override
     @RestResource(exported = false)
     void deleteInBatch(Iterable<BusinessUnit> entities);
