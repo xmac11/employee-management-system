@@ -10,6 +10,7 @@ package com.team.ghana.authJwt;
 // }
 // the /auth endpoint is handled by JwtAuthController
 
+import com.team.ghana.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,37 +64,26 @@ public class JwtWebSecurityConfig extends WebSecurityConfigurerAdapter {
         // all other requests need to be authenticated
         http.authorizeRequests()
 
-                // business units
-                .antMatchers(HttpMethod.GET, "/businessUnits/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/businessUnits/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PUT, "/businessUnits/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PATCH, "/businessUnits/**").hasRole(String.valueOf(ADMIN))
+                // business units' managers
+                .antMatchers(HttpMethod.POST, "/businessUnits/**","/departments/**","/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.BUSINESSUNITMAN.toString())
+                .antMatchers(HttpMethod.PUT, "/businessUnits/**","/departments/**","/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.BUSINESSUNITMAN.toString())
+                .antMatchers(HttpMethod.PATCH, "/businessUnits/**","/departments/**","/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.BUSINESSUNITMAN.toString())
 
-                // departments
-                .antMatchers(HttpMethod.GET,"/departments/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/departments/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PUT, "/departments/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PATCH, "/departments/**").hasRole(String.valueOf(ADMIN))
+                // departments' managers
+                .antMatchers(HttpMethod.POST, "/departments/**","/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.DEPARTMENTMAN.toString(), UserRole.BUSINESSUNITMAN.toString())
+                .antMatchers(HttpMethod.PUT, "/departments/**","/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.DEPARTMENTMAN.toString(), UserRole.BUSINESSUNITMAN.toString())
+                .antMatchers(HttpMethod.PATCH, "/departments/**","/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.DEPARTMENTMAN.toString(), UserRole.BUSINESSUNITMAN.toString())
 
-                // units
-                .antMatchers(HttpMethod.GET,"/units/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/units/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PUT, "/units/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PATCH, "/units/**").hasRole(String.valueOf(ADMIN))
+                // units' managers
+                .antMatchers(HttpMethod.POST, "/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.UNITMAN.toString(), UserRole.DEPARTMENTMAN.toString(), UserRole.BUSINESSUNITMAN.toString())
+                .antMatchers(HttpMethod.PUT, "/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.UNITMAN.toString(), UserRole.DEPARTMENTMAN.toString(), UserRole.BUSINESSUNITMAN.toString())
+                .antMatchers(HttpMethod.PATCH, "/units/**","/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.UNITMAN.toString(), UserRole.DEPARTMENTMAN.toString(), UserRole.BUSINESSUNITMAN.toString())
 
-                // employees
-                .antMatchers(HttpMethod.GET,"/employees/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/employees/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PUT, "/employees/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PATCH, "/employees/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.DELETE, "/employees/**").hasRole(String.valueOf(ADMIN))
+                // managers
+                .antMatchers(HttpMethod.DELETE, "/employees/**","/tasks/**").hasAnyRole(String.valueOf(ADMIN), UserRole.BUSINESSUNITMAN.toString(), UserRole.DEPARTMENTMAN.toString(), UserRole.UNITMAN.toString())
 
-                // tasks
-                .antMatchers(HttpMethod.GET,"/tasks/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/tasks/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PUT, "/tasks/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.PATCH, "/tasks/**").hasRole(String.valueOf(ADMIN))
-                .antMatchers(HttpMethod.DELETE, "/tasks/**").hasRole(String.valueOf(ADMIN))
+                // all
+                .antMatchers(HttpMethod.GET, "/businessUnits/**","/departments/**","/units/**","/employees/**","/tasks/**").authenticated()
 
                 .anyRequest().authenticated().and()
                 .exceptionHandling()

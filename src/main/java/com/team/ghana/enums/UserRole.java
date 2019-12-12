@@ -1,5 +1,5 @@
 package com.team.ghana.enums;
 
 public enum UserRole {
-    ADMIN, USER
+    ADMIN, BUSINESSUNITMAN, DEPARTMENTMAN, UNITMAN, USER
 }

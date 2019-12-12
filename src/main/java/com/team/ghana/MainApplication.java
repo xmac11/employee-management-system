@@ -166,9 +166,15 @@ public class MainApplication implements CommandLineRunner {
 			employeeRepository.save(katerina);
 		}
 
-		User admin = new User("admin@gmail.com","admin","123", UserRole.ADMIN);
+		User admin = new User("admin@gmail.com","admin","123", UserRole.BUSINESSUNITMAN);
 		userService.registerUser(admin);
-		User user = new User("user@gmail.com","user1", "123", UserRole.USER);
+		User businessUnitMan = new User("bu@gmail.com","buman","123", UserRole.BUSINESSUNITMAN);
+		userService.registerUser(businessUnitMan);
+		User departmentMan = new User("dept@gmail.com","deptman","123", UserRole.DEPARTMENTMAN);
+		userService.registerUser(departmentMan);
+		User unitMan = new User("dept@gmail.com","uman","123", UserRole.UNITMAN);
+		userService.registerUser(unitMan);
+		User user = new User("user@gmail.com","user", "123", UserRole.USER);
 		userService.registerUser(user);
 	}
 }
