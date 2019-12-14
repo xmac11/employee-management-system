@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,9 +17,9 @@ public class BusinessUnitController {
     private BusinessUnitService service;
 
     @GetMapping("/businessUnits")
-    public ResponseEntity getAllBusinessUnit() {
+    public ResponseEntity getAllBusinessUnits() {
 
-        GenericResponse response = service.getAllBusinessUnit();
+        GenericResponse response = service.getAllBusinessUnits();
 
         return new ResponseEntity<>(
                 response.getData(),
@@ -31,7 +30,7 @@ public class BusinessUnitController {
 
     @GetMapping("/businessUnits/{businessUnitId}")
         public ResponseEntity getBusinessUnitById(@PathVariable Long businessUnitId) {
-            GenericResponse response = service.getAllBusinessUnitById(businessUnitId);
+            GenericResponse response = service.getBusinessUnitById(businessUnitId);
 
             return new ResponseEntity<>(response.getData() != null ? response.getData() : response.getError(),
                     null,
