@@ -22,7 +22,7 @@ public class MyUserDetailsService implements UserDetailsService {
             userDetails = new MyUserDetails();
             userDetails.setUser(user);
         } else {
-            throw new UsernameNotFoundException("User not exist with name : " + username);
+            throw new UsernameNotFoundException("User with name : "+ username +" does not exist : ");
         }
         return userDetails;
     }
