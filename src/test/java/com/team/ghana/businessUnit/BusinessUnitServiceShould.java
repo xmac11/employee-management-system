@@ -108,11 +108,10 @@ public class BusinessUnitServiceShould {
 
     /* POST */
 
-    //TODO
     @Test
     public void postBusinessUnitToRepository() {
         when(businessUnitRepository.save(any())).thenReturn(businessUnit);
-        when(companyRepository.findCompanyById(anyLong())).thenReturn(mockedCompany);
+        when(companyRepository.findById(anyLong())).thenReturn(Optional.of(mockedCompany));
 
         GenericResponse response = businessUnitService.postBusinessUnit(businessUnit);
         Assert.assertNotNull(response.getData());
