@@ -84,17 +84,16 @@ public class BusinessUnitServiceShould {
         verify(businessUnitMapper, times(1)).mapBusinessUnitListToBusinessUnitResponseList(anyList());
     }
 
-    //TODO
     @Test
     public void getBusinessUnitByIdFromRepository() {
         BusinessUnit businessUnit1 = Mockito.mock(BusinessUnit.class);
         when(businessUnitRepository.findBusinessUnitById(1L)).thenReturn(businessUnit1);
         businessUnitService.getBusinessUnitById(1L);
-        verify(businessUnitRepository).findBusinessUnitById(1L);
+        verify(businessUnitRepository).findById(1L);
 
         when(businessUnitRepository.findBusinessUnitById(2L)).thenReturn(null);
         businessUnitService.getBusinessUnitById(2L);
-        verify(businessUnitRepository).findBusinessUnitById(2L);
+        verify(businessUnitRepository).findById(2L);
     }
 
     @Test
