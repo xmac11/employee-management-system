@@ -59,18 +59,4 @@ public class DepartmentFeature {
                 e.printStackTrace();
             }
     }
-
-    @Test
-    @Ignore
-    public void departments() {
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.post("/departments")
-                    .contentType(MediaType.APPLICATION_JSON)
-            )
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(DepartmentJson.json));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

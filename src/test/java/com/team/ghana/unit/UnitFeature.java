@@ -58,18 +58,4 @@ public class UnitFeature {
                 e.printStackTrace();
             }
     }
-
-    @Test
-    @Ignore
-    public void postunit() {
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.post("/units")
-                    .contentType(MediaType.APPLICATION_JSON)
-            )
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(UnitJson.json));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

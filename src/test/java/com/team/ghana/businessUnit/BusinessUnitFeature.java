@@ -58,18 +58,4 @@ public class BusinessUnitFeature {
                 e.printStackTrace();
             }
     }
-
-    @Test
-    @Ignore
-    public void businessUnits() {
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.post("/businessUnits")
-                    .contentType(MediaType.APPLICATION_JSON)
-            )
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(BusinessUnitJson.json));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
