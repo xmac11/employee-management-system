@@ -2,6 +2,8 @@ package com.team.ghana.employee;
 
 import com.team.ghana.enums.ContractType;
 import com.team.ghana.enums.Status;
+import com.team.ghana.errorHandling.EmployeeInDifferentUnitException;
+import com.team.ghana.task.Task;
 import com.team.ghana.unit.Unit;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.*;
 
 @Entity
 public class Employee {
@@ -32,6 +35,8 @@ public class Employee {
     @ManyToOne
     private Unit unit;
     private String position;
+    @ManyToMany
+    private Set<Task> tasks = new HashSet<>();
 
     public Employee() {
     }
@@ -137,6 +142,64 @@ public class Employee {
         this.position = position;
     }
 
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    private void addTask(Task task) {
+        this.tasks.add(task);
+        task.getEmployees().add(this);
+    }
+
+    public void addTaskIfSameUnit(Task task) {
+        // converted Set to List, because Set does not have a get() method
+        List<Employee> employees = new ArrayList<>(task.getEmployees());
+
+        if(employees.size() == 0 || this.checkIfSameUnit(employees.get(0).getUnit())) {
+            this.addTask(task);
+            return;
+        }
+        throw new EmployeeInDifferentUnitException(id);
+    }
+
+    private boolean checkIfSameUnit(Unit otherUnit) {
+        return this.unit.equals(otherUnit);
+    }
+
+    public void removeTask(Task task) {
+        this.tasks.remove(task);
+        task.getEmployees().remove(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(homeAddress, employee.homeAddress) &&
+                Objects.equals(phoneNumber, employee.phoneNumber) &&
+                Objects.equals(hireDate, employee.hireDate) &&
+                Objects.equals(redundancyDate, employee.redundancyDate) &&
+                status == employee.status &&
+                contractType == employee.contractType &&
+                Objects.equals(unit, employee.unit) &&
+                Objects.equals(position, employee.position) &&
+                Objects.equals(tasks, employee.tasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, homeAddress, phoneNumber, hireDate, redundancyDate, status, contractType, unit, position, tasks);
+    }
     @AssertTrue(message = "Redundancy date should be null or after the hiring date")
     private boolean isAssertTrue() {
         return this.redundancyDate == null ||

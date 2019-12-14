@@ -2,6 +2,7 @@ package com.team.ghana.employee;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class EmployeeMapper {
                 employee.getPosition());
     }
 
-    public List<EmployeeResponse> mapEmployeeListToEmployeeResponseList(List<Employee> employeeList) {
+    public List<EmployeeResponse> mapEmployeeListToEmployeeResponseList(Collection<Employee> employeeList) {
 
         return employeeList.stream()
                 .map(this::mapEmployeeToEmployeeResponse)
