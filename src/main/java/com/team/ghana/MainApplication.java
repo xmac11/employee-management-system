@@ -57,7 +57,7 @@ public class MainApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if(true) {
+		if(false) {
 			Company company = new Company("UniSystems", "+30 211 999 7000", "19-23, Al.Pantou str.");
 			//Company company2 = new Company("Info Quest Technologies", "+30 211 999 7000", "19-23, Al.Pantou str.");
 
@@ -164,21 +164,21 @@ public class MainApplication implements CommandLineRunner {
 			employeeRepository.save(eleni);
 			employeeRepository.save(maria);
 			employeeRepository.save(katerina);
+
+			User admin = new User("admin@gmail.com", "admin", "123", UserRole.ADMIN);
+			userService.registerUser(admin);
+
+			User businessUnitManager = new User("businessUnitManager@gmail.com", "buManager", "123", UserRole.BUSINESSUNITMANAGER);
+			userService.registerUser(businessUnitManager);
+
+			User departmentManager = new User("departmentManager@gmail.com", "departmentManager", "123", UserRole.DEPARTMENTMANAGER);
+			userService.registerUser(departmentManager);
+
+			User unitManager = new User("unitManager@gmail.com", "unitManager", "123", UserRole.UNITMANAGER);
+			userService.registerUser(unitManager);
+
+			User user = new User("user@gmail.com", "user", "123", UserRole.USER);
+			userService.registerUser(user);
 		}
-
-		User admin = new User("admin@gmail.com","admin","123", UserRole.BUSINESSUNITMANAGER);
-		userService.registerUser(admin);
-
-		User businessUnitManager = new User("businessUnitManager@gmail.com","buManager","123", UserRole.BUSINESSUNITMANAGER);
-		userService.registerUser(businessUnitManager);
-
-		User departmentManager = new User("departmentManager@gmail.com","departmentManager","123", UserRole.DEPARTMENTMANAGER);
-		userService.registerUser(departmentManager);
-
-		User unitManager = new User("unitManager@gmail.com","unitManager","123", UserRole.UNITMANAGER);
-		userService.registerUser(unitManager);
-
-		User user = new User("user@gmail.com","user", "123", UserRole.USER);
-		userService.registerUser(user);
 	}
 }

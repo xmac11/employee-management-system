@@ -16,6 +16,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
 	implementation('io.jsonwebtoken:jjwt:0.2')
 	runtimeOnly 'com.h2database:h2'
 	compile("org.springframework.boot:spring-boot-starter-security")
