@@ -1,6 +1,5 @@
 package com.team.ghana.department;
 
-import com.team.ghana.errorHandling.FieldNotFoundException;
 import com.team.ghana.errorHandling.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
