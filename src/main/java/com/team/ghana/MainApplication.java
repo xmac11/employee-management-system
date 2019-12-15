@@ -1,5 +1,7 @@
 package com.team.ghana;
 
+import com.team.ghana.apiUser.User;
+import com.team.ghana.apiUser.UserService;
 import com.team.ghana.businessUnit.BusinessUnit;
 import com.team.ghana.businessUnit.BusinessUnitRepository;
 import com.team.ghana.company.Company;
@@ -8,6 +10,7 @@ import com.team.ghana.department.Department;
 import com.team.ghana.department.DepartmentRepository;
 import com.team.ghana.employee.Employee;
 import com.team.ghana.employee.EmployeeRepository;
+import com.team.ghana.enums.UserRole;
 import com.team.ghana.task.Task;
 import com.team.ghana.task.TaskRepository;
 import com.team.ghana.unit.Unit;
@@ -18,7 +21,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
 import static com.team.ghana.enums.ContractType.EXTERNAL;
 import static com.team.ghana.enums.ContractType.UNISYSTEMS;
@@ -45,6 +47,8 @@ public class MainApplication implements CommandLineRunner {
 	private EmployeeRepository employeeRepository;
 
 	@Autowired
+	private UserService userService;
+	@Autowired
 	private TaskRepository taskRepository;
 
 	public static void main(String[] args) {
@@ -53,7 +57,7 @@ public class MainApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if (false) {
+		if(false) {
 			Company company = new Company("UniSystems", "+30 211 999 7000", "19-23, Al.Pantou str.");
 			//Company company2 = new Company("Info Quest Technologies", "+30 211 999 7000", "19-23, Al.Pantou str.");
 
@@ -160,6 +164,21 @@ public class MainApplication implements CommandLineRunner {
 			employeeRepository.save(eleni);
 			employeeRepository.save(maria);
 			employeeRepository.save(katerina);
+
+			User admin = new User("admin@gmail.com", "admin", "123", UserRole.ADMIN);
+			userService.registerUser(admin);
+
+			User businessUnitManager = new User("businessUnitManager@gmail.com", "buManager", "123", UserRole.BUSINESSUNITMANAGER);
+			userService.registerUser(businessUnitManager);
+
+			User departmentManager = new User("departmentManager@gmail.com", "departmentManager", "123", UserRole.DEPARTMENTMANAGER);
+			userService.registerUser(departmentManager);
+
+			User unitManager = new User("unitManager@gmail.com", "unitManager", "123", UserRole.UNITMANAGER);
+			userService.registerUser(unitManager);
+
+			User user = new User("user@gmail.com", "user", "123", UserRole.USER);
+			userService.registerUser(user);
 		}
 	}
 }
