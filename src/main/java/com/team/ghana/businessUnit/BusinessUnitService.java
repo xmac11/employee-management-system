@@ -27,14 +27,14 @@ public class BusinessUnitService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public GenericResponse<List<BusinessUnitResponse>> getAllBusinessUnit(){
+    public GenericResponse<List<BusinessUnitResponse>> getAllBusinessUnits(){
         List<BusinessUnit> retrievedBusinessUnits = businessUnitRepository.findAll();
         List<BusinessUnitResponse> businessUnitResponse = businessUnitMapper.mapBusinessUnitListToBusinessUnitResponseList(retrievedBusinessUnits);
 
         return new GenericResponse<>(businessUnitResponse);
     }
 
-    public GenericResponse<BusinessUnitResponse> getAllBusinessUnitById(Long businessUnitId) {
+    public GenericResponse<BusinessUnitResponse> getBusinessUnitById(Long businessUnitId) {
             BusinessUnit businessUnit = businessUnitRepository.findById(businessUnitId).orElse(null);
 
             if(businessUnit == null) {
